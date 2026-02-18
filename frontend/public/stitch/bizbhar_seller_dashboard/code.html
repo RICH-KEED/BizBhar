@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BizBhar Seller Dashboard</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#3764eb",
+                "background-light": "#f6f6f8",
+                "background-dark": "#111521",
+                "sidebar-bg": "#1e293b", // Dark Navy approximate
+              },
+              fontFamily: {
+                "display": ["Inter", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for sidebar if needed */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#0e111b] dark:text-white font-display">
+<div class="flex h-screen w-full overflow-hidden bg-background-light dark:bg-background-dark">
+<!-- Sidebar Navigation -->
+<!-- Using specific dark navy color requested: oklch(0.2064 0.0388 265.5472) ~ #1e2532 approx or close to slate-900. Using #111827 (gray-900) or custom hex for dark theme feel -->
+<aside class="flex w-64 flex-col justify-between bg-[#111827] text-white border-r border-gray-800 transition-all duration-300 ease-in-out shrink-0 h-full overflow-y-auto no-scrollbar">
+<div class="flex flex-col gap-6 p-6">
+<!-- User Profile / Brand -->
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 border-2 border-primary" data-alt="Seller profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBl6yVRQI2fFpyf8kT3lrP3J-XD3RoyL8VEFYf42R0GAIjElXqIXcycOKj9sLebMZB9JiCpDSJXPl_4cNlKtTMW_kXOywRw2aJeKQ-3M8KSN6USnRF92Zyps99Lz1_DhbqvTb9yo7qjJ5j0m87TYS8Yj391TVMO6YFTlEdnQJOOD4jwswIHGcS0oWNz35o1AZwc7U65lZnhvPtx6B1N_jYdV8__zf3jyW70VO0sENmrSKc3K_4CE8nPn91S2IThkqOzbWEyiRErjbU");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-lg font-bold leading-tight">BizBhar</h1>
+<p class="text-gray-400 text-xs font-normal">Seller Dashboard</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-2 mt-4">
+<!-- Dashboard (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary text-white shadow-md shadow-primary/20 hover:bg-primary/90 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<!-- Products -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px]">shopping_bag</span>
+<span class="text-sm font-medium">Products</span>
+</a>
+<!-- Orders -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px]">shopping_cart</span>
+<span class="text-sm font-medium">Orders</span>
+<span class="ml-auto bg-primary/20 text-primary text-xs font-bold px-2 py-0.5 rounded-full">12</span>
+</a>
+<!-- Analytics -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px]">monitoring</span>
+<span class="text-sm font-medium">Analytics</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<!-- Logout Section -->
+<div class="p-6 border-t border-gray-800">
+<button class="flex w-full items-center justify-center gap-2 rounded-lg bg-gray-800 py-3 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span>Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-background-light dark:bg-background-dark relative">
+<!-- Top Header -->
+<header class="h-20 w-full flex items-center justify-between px-8 bg-white dark:bg-[#1e2330] border-b border-gray-200 dark:border-gray-800 shrink-0">
+<div>
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white">Welcome back, Rajesh</h2>
+<p class="text-sm text-gray-500 dark:text-gray-400">Here's what's happening with your store today.</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+<input class="pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 w-64 dark:text-white" placeholder="Search orders..." type="text"/>
+</div>
+<button class="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-[#1e2330]"></span>
+</button>
+</div>
+</header>
+<!-- Scrollable Dashboard Content -->
+<div class="flex-1 overflow-y-auto p-8">
+<!-- Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<!-- Total Revenue -->
+<div class="bg-white dark:bg-[#1e2330] rounded-xl p-6 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-primary">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                +12%
+                            </span>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Total Revenue</p>
+<h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹45,200</h3>
+</div>
+<!-- Total Orders -->
+<div class="bg-white dark:bg-[#1e2330] rounded-xl p-6 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600">
+<span class="material-symbols-outlined">shopping_basket</span>
+</div>
+<span class="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                +5%
+                            </span>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Total Orders</p>
+<h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">124</h3>
+</div>
+<!-- Active Products -->
+<div class="bg-white dark:bg-[#1e2330] rounded-xl p-6 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20 text-orange-600">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<span class="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                +2%
+                            </span>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Active Products</p>
+<h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">45</h3>
+</div>
+<!-- Store Rating -->
+<div class="bg-white dark:bg-[#1e2330] rounded-xl p-6 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600">
+<span class="material-symbols-outlined">star</span>
+</div>
+<span class="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+                                +0.1
+                            </span>
+</div>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Store Rating</p>
+<h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">4.8<span class="text-base text-gray-400 font-normal">/5.0</span></h3>
+</div>
+</div>
+<!-- Main Grid: Charts & Progress -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<!-- Sales Analytics Chart -->
+<div class="lg:col-span-2 bg-white dark:bg-[#1e2330] rounded-xl p-6 border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-lg font-bold text-gray-900 dark:text-white">Sales Analytics</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400">Revenue performance over the last 30 days</p>
+</div>
+<select class="text-sm border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-lg px-3 py-2 text-gray-600 dark:text-gray-300 focus:ring-primary focus:border-primary">
+<option>Last 30 Days</option>
+<option>Last 7 Days</option>
+<option>Last Year</option>
+</select>
+</div>
+<!-- Chart Placeholder -->
+<div class="w-full h-64 relative">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 40">
+<!-- Grid lines -->
+<line stroke="#f1f5f9" stroke-width="0.2" x1="0" x2="100" y1="10" y2="10"></line>
+<line stroke="#f1f5f9" stroke-width="0.2" x1="0" x2="100" y1="20" y2="20"></line>
+<line stroke="#f1f5f9" stroke-width="0.2" x1="0" x2="100" y1="30" y2="30"></line>
+<!-- Chart Line -->
+<defs>
+<lineargradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#3764eb" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#3764eb" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0 35 Q 10 32, 20 34 T 40 25 T 60 20 T 80 15 T 100 8 V 40 H 0 Z" fill="url(#gradient)"></path>
+<path d="M0 35 Q 10 32, 20 34 T 40 25 T 60 20 T 80 15 T 100 8" fill="none" stroke="#3764eb" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8"></path>
+</svg>
+<!-- Tooltip simulated -->
+<div class="absolute top-[20%] right-[20%] bg-gray-900 text-white text-xs py-1 px-2 rounded shadow-lg">
+                               ₹12,450
+                           </div>
+</div>
+<div class="flex justify-between text-xs text-gray-400 mt-4 px-2">
+<span>Week 1</span>
+<span>Week 2</span>
+<span>Week 3</span>
+<span>Week 4</span>
+</div>
+</div>
+<!-- Payout Progress Widget -->
+<div class="lg:col-span-1 bg-white dark:bg-[#1e2330] rounded-xl p-6 border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col">
+<h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Payout Progress</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Track your earnings towards the next payout.</p>
+<div class="flex-1 flex flex-col justify-center items-center py-4 relative">
+<!-- Circular Progress or Custom Graphic -->
+<div class="relative w-full h-40 bg-gradient-to-br from-primary to-blue-600 rounded-2xl p-6 flex flex-col justify-between text-white overflow-hidden" data-alt="Abstract gradient background for payout card">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]">account_balance_wallet</span>
+</div>
+<div>
+<p class="text-blue-100 text-sm font-medium">Current Balance</p>
+<h2 class="text-3xl font-bold mt-1">₹3,400</h2>
+</div>
+<div>
+<div class="flex justify-between text-xs font-medium mb-2 text-blue-100">
+<span>Progress</span>
+<span>68%</span>
+</div>
+<div class="w-full bg-white/20 rounded-full h-2">
+<div class="bg-white h-2 rounded-full" style="width: 68%"></div>
+</div>
+<div class="flex justify-between text-[10px] mt-1 text-blue-200">
+<span>₹0</span>
+<span>Goal: ₹5,000</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4">
+<button class="w-full bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed flex items-center justify-center gap-2" disabled="">
+<span class="material-symbols-outlined text-sm">lock</span>
+                                Request Payout
+                            </button>
+<p class="text-xs text-center text-gray-400 mt-2">Reach ₹5,000 to unlock payout</p>
+</div>
+</div>
+</div>
+<!-- Recent Orders Table -->
+<div class="bg-white dark:bg-[#1e2330] rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+<h3 class="text-lg font-bold text-gray-900 dark:text-white">Recent Orders</h3>
+<a class="text-sm font-medium text-primary hover:text-blue-700 flex items-center gap-1" href="#">
+                            View All
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-50 dark:bg-gray-800/50 text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+<th class="px-6 py-4 font-semibold">Order ID</th>
+<th class="px-6 py-4 font-semibold">Customer</th>
+<th class="px-6 py-4 font-semibold">Date</th>
+<th class="px-6 py-4 font-semibold">Amount</th>
+<th class="px-6 py-4 font-semibold">Status</th>
+<th class="px-6 py-4 font-semibold text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-sm">
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">#ORD-7782</td>
+<td class="px-6 py-4 text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-700 dark:text-blue-300 text-xs font-bold">AK</div>
+<span>Amit Kumar</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400">Today, 10:23 AM</td>
+<td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">₹1,299</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
+<span class="size-1.5 rounded-full bg-yellow-500"></span>
+                                            Pending
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">#ORD-7781</td>
+<td class="px-6 py-4 text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-700 dark:text-purple-300 text-xs font-bold">PS</div>
+<span>Priya Sharma</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400">Yesterday, 4:15 PM</td>
+<td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">₹850</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+<span class="size-1.5 rounded-full bg-blue-500"></span>
+                                            Shipped
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">#ORD-7780</td>
+<td class="px-6 py-4 text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-green-700 dark:text-green-300 text-xs font-bold">RV</div>
+<span>Rahul Verma</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400">Oct 24, 2023</td>
+<td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">₹3,450</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+<span class="size-1.5 rounded-full bg-green-500"></span>
+                                            Delivered
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">#ORD-7779</td>
+<td class="px-6 py-4 text-gray-600 dark:text-gray-300">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center text-orange-700 dark:text-orange-300 text-xs font-bold">SK</div>
+<span>Sneha Kapoor</span>
+</div>
+</td>
+<td class="px-6 py-4 text-gray-500 dark:text-gray-400">Oct 23, 2023</td>
+<td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">₹2,100</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+<span class="size-1.5 rounded-full bg-green-500"></span>
+                                            Delivered
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<footer class="mt-8 text-center text-xs text-gray-400">
+<p>© 2023 BizBhar Marketplace. All rights reserved.</p>
+</footer>
+</div>
+</main>
+</div>
+</body></html>

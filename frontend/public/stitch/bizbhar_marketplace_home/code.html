@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BizBhar Marketplace Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "oklch(0.5449 0.2154 262.7414)",
+                        "accent": "oklch(0.7205 0.1920 149.4926)",
+                        "bg-main": "oklch(0.9838 0.0035 247.8583)",
+                        "border-light": "#e2e8f0", // light bluish-gray
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.375rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        "subtle": "0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03)",
+                        "card": "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02)",
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: theme('colors.bg-main');
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            transition: all 0.3s ease;
+        }
+        .subtle-border {
+            border-color: theme('colors.border-light');
+        }
+    </style>
+</head>
+<body class="text-slate-900 selection:bg-primary/20">
+<header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-border-light px-4 md:px-10 py-3">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between gap-4 md:gap-8">
+<div class="flex items-center gap-10">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">rocket_launch</span>
+<h2 class="text-xl font-extrabold tracking-tight text-slate-900">BizBhar</h2>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors" href="#">Electronics</a>
+<a class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors" href="#">Fashion</a>
+<a class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors" href="#">Home &amp; Living</a>
+<a class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors" href="#">Beauty</a>
+</nav>
+</div>
+<div class="flex items-center gap-3 md:gap-6">
+<div class="hidden md:flex items-center gap-2">
+<button class="flex items-center justify-center h-10 px-5 rounded-lg border border-border-light text-slate-700 font-bold text-sm hover:bg-slate-50 transition-all">
+                    Become a Seller
+                </button>
+<button class="flex items-center justify-center h-10 px-5 rounded-lg bg-primary text-white font-bold text-sm hover:opacity-90 shadow-subtle transition-all">
+                    Login/Register
+                </button>
+</div>
+<div class="flex items-center gap-4 text-slate-700">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary">shopping_cart</span>
+<span class="material-symbols-outlined lg:hidden cursor-pointer">menu</span>
+</div>
+</div>
+</div>
+</header>
+<main>
+<section class="relative w-full bg-white pt-10 pb-20 px-4">
+<div class="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div class="flex flex-col gap-8 order-2 lg:order-1">
+<div class="space-y-4">
+<span class="inline-block px-3 py-1 bg-accent/10 text-accent text-xs font-bold uppercase tracking-wider rounded-full">New Arrivals Daily</span>
+<h1 class="text-4xl md:text-6xl font-black leading-tight tracking-tight text-slate-900">
+                        Discover Everything <span class="text-primary">You Need</span> in One Place.
+                    </h1>
+<p class="text-lg text-slate-500 max-w-xl">
+                        Connect with thousands of verified sellers and find the best deals on premium electronics, trendy fashion, and modern home essentials.
+                    </p>
+</div>
+<div class="flex flex-col sm:flex-row w-full max-w-2xl bg-bg-main p-2 rounded-xl border border-border-light">
+<div class="flex flex-1 items-center px-4 gap-3">
+<span class="material-symbols-outlined text-slate-400">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-slate-800 placeholder:text-slate-400 py-3" placeholder="Search for products, brands, and more..." type="text"/>
+</div>
+<button class="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:opacity-95 transition-all shadow-subtle">
+                        Search
+                    </button>
+</div>
+<div class="flex items-center gap-6 pt-4">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAor5yAwpI64_mPXcFqvGP3JTOmZEoG68UBuNs0pVtJdEo1uIvErNlqzaVWv7_7oljpWV10CTeT6Dvzallwl6YG9l-baxAgBW-nPQEP540Hdk8yE1HpfHFogi0cNR823Zbrdn7KVZqb7MdV8QLUD7_7rFpxJx1O8DG4aZNTzYyceV9ysZoyM1BWTHLKY7KmpJNMPBSGG6qPw3fosbhhwGZo_T7rrn4-GDzcIwTPHgGJi7sGFKoDoGzLV3exV-A33aoDE19K5tmp1Zg')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBxeuODo9PlcUMCbkqdajjxiGZFB8RF1ofy2bG0TxNunhDNU63syCiHmwTVvzNn9TGZ6h1wQ5-HHNpuaUHRKD3YIx6goVOgYBKSAVRKrVZideJNw_46vm_KtwcgCr0ClgColws_61_ym1U-_UOELEoAtag5oujI040FqWyTlwFg9SebTxmsjI64kv6jaSVuxXW6Mqb79Htr3mPXqknxVtwaj5n1v-C2uFrAggntyZANf3oaW6PpUKPxJ8a1THhTGeVqnxzedybCjYw')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDVgmUb1nM0N5POWL1ssIg91-8K2afRq0qlzTJXSWuN59GDPEcP6UUAR5msp9ra8IJ6RFUPHYVAaxnSxa7D2CkTx9_LUf0qGyTgdzYTfR927zdFg5JQ-0YEXHZOG2dumgRMFSZNYv8FumMny1vedIvZtTBCgXr7QX8Lu5aYwlUk7koXHpQAMSGVtM_3_wYg_5DsRfYCrP6UM2eyFZ5irSIFBEg0L1Se9IrPMwLY_fSurwrX4KZ1Je_Bz9exAak4i7yYjESRi4BEBvk')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-white bg-accent flex items-center justify-center text-white text-[10px] font-bold">+10k</div>
+</div>
+<p class="text-sm font-medium text-slate-500">Trusted by over 10,000+ happy shoppers</p>
+</div>
+</div>
+<div class="relative order-1 lg:order-2">
+<div class="w-full aspect-square rounded-2xl bg-bg-main overflow-hidden border border-border-light relative shadow-card">
+<div class="absolute inset-0 bg-cover bg-center opacity-90" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAilOA0qlbKLlQ3lVeaRCS6MgY79Rp8B5QBWvAmFFGwF7Vn5IcwVBhn3q2A_egZDi7saqjPwDqEx07PCu-sDoL9N2lU0km7aP9ZuccdqdsdskSNPYcsyHqmcENhXirn1hCWBVhr1IYQqTjSm8Cu3_UQlJ2ZiUpxxKfMhubXKnI0kCr06JnrDjWviIlj30W5rYbEHpH_0ml2_ORhXwVozKLHZCfRpVexaxFu4Tk00tqLhd5hYkaJOTZJHkliq7dFxEEde3vmjfOPUV0')"></div>
+<div class="absolute top-8 left-8 bg-white p-4 rounded-xl shadow-card flex items-center gap-3 border border-border-light">
+<div class="w-10 h-10 bg-accent/10 text-accent rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-tighter leading-none">Verified</p>
+<p class="text-sm font-bold text-slate-800">Premium Sellers</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-bg-main py-10">
+<div class="max-w-[1200px] mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="flex items-center gap-4 p-6 bg-white rounded-xl shadow-subtle border border-border-light">
+<div class="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">security</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-900">Secure Payments</h4>
+<p class="text-sm text-slate-500">100% encrypted transactions</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-6 bg-white rounded-xl shadow-subtle border border-border-light">
+<div class="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">public</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-900">Global Shipping</h4>
+<p class="text-sm text-slate-500">Available in 200+ countries</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-6 bg-white rounded-xl shadow-subtle border border-border-light">
+<div class="w-12 h-12 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">headset_mic</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-900">24/7 Support</h4>
+<p class="text-sm text-slate-500">Dedicated assistance team</p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-16 px-4 bg-white">
+<div class="max-w-[1200px] mx-auto">
+<div class="flex items-end justify-between mb-10">
+<div>
+<h2 class="text-3xl font-bold text-slate-900 tracking-tight">Featured Categories</h2>
+<p class="text-slate-500">Handpicked collections for your lifestyle</p>
+</div>
+<a class="text-primary font-bold text-sm flex items-center gap-1 group" href="#">
+                    View All <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+<a class="group flex flex-col items-center gap-4" href="#">
+<div class="w-full aspect-square rounded-2xl bg-bg-main overflow-hidden relative border border-transparent group-hover:border-primary/20 group-hover:shadow-card transition-all">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYZH80fVsBPPKnINYjGpf_3FTnQdXI4xQpNkkIBpcWeX7SO9PcJGDLinRfwVAgP-olkksGYey4oXViCyHCzPlPEnmTtEW0PoAf1BcHZ34tgWmrU8RXGPhzlP8AOkcn7fb2dDEts877SYNQTzss4F372Exh_S-JGkR7BvJo4zsrUKmu95GVEEsBGawqWFr9DZjCIdZIEXZZh1Sg4qvYuix4I1LpwNOcxMAkeIfpauXMiV43VWNetLmuodcVIyHvSUeFAXcuID0TDi0')"></div>
+<div class="absolute inset-0 bg-slate-900/5 group-hover:bg-primary/10 transition-colors"></div>
+</div>
+<p class="font-bold text-slate-700 group-hover:text-primary">Electronics</p>
+</a>
+<a class="group flex flex-col items-center gap-4" href="#">
+<div class="w-full aspect-square rounded-2xl bg-bg-main overflow-hidden relative border border-transparent group-hover:border-primary/20 group-hover:shadow-card transition-all">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCK5n6QzI4rCzmuH0CdM5UK5GBdlzzWCl6pExsMGn9cPYX7dhxdvOFUVUnXLD9k3c6DRwJ9DlRZ3rVdq2NwGMNpNDDbJSVp14skpn1UbHkD4l64H1u2EHrR0l-QPp7yfPxG4d1DZkBKJAH11i6cxki-zd0V1w6CItR19-Ffhh0IBPMFJeegGEvYhqtdCjDJjpjJnrE3HyO3a0jtQ-en2g_sMj7LFgxqUN7GpxS1aLwKKylCKf_Bef0wUUnVfAvOBIGugTTEG_IpQgA')"></div>
+<div class="absolute inset-0 bg-slate-900/5 group-hover:bg-primary/10 transition-colors"></div>
+</div>
+<p class="font-bold text-slate-700 group-hover:text-primary">Fashion</p>
+</a>
+<a class="group flex flex-col items-center gap-4" href="#">
+<div class="w-full aspect-square rounded-2xl bg-bg-main overflow-hidden relative border border-transparent group-hover:border-primary/20 group-hover:shadow-card transition-all">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA7y3JurA5VBZ6fsD3IMQRNO0-0hh4_lRx3zx_zu0Z1KmOjrzOH3vvYZQIQadRhr0QK6qkAoo_nt1nUjZ47tGUGeH9EY3TkrUEyYV398x4905jQESDdfDg7pHdjryrbN8wskQv90GJRYCM0k7gRTTOFhr5fjAFdiszn78aj-lJcWctojVwpdpaXFu3-DtnMeua3x9BAUQd1HnochEEVOOvAPLlpEkWbZ95hHpYoNPL43mzlHaRND3RQBO3lfim3JCYavcasw8VQodo')"></div>
+<div class="absolute inset-0 bg-slate-900/5 group-hover:bg-primary/10 transition-colors"></div>
+</div>
+<p class="font-bold text-slate-700 group-hover:text-primary">Home &amp; Living</p>
+</a>
+<a class="group flex flex-col items-center gap-4" href="#">
+<div class="w-full aspect-square rounded-2xl bg-bg-main overflow-hidden relative border border-transparent group-hover:border-primary/20 group-hover:shadow-card transition-all">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDrQ1E3ZK3CHOODAi_NQpsXVaA9NBYFLfXVrredlFDVrMaaRacsEmHlJ61ThOMpyG5QRzmqhgdOmhwuuIZYvIvRd5YR3BM0OKrG_uV4y9rp_FYdU5kyySvuu6HJkHxfe2yOCnGTXUtmgf6d5LJqwb9omCbSwytg6zNiFUSaX1jmU10dypUgs8NjX2oeNHQwHfzLpspZ6h7Qxocl8yKnifDNp6UBMLc1kSw7fJJIMG1fWHKjwNrrPY8ieYD0CDSK8IMqNYkMvi9tqf0')"></div>
+<div class="absolute inset-0 bg-slate-900/5 group-hover:bg-primary/10 transition-colors"></div>
+</div>
+<p class="font-bold text-slate-700 group-hover:text-primary">Beauty</p>
+</a>
+<a class="group flex flex-col items-center gap-4" href="#">
+<div class="w-full aspect-square rounded-2xl bg-bg-main overflow-hidden relative border border-transparent group-hover:border-primary/20 group-hover:shadow-card transition-all">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA9zIrfjR5d42bVS523kCz2ujwiiUQgTyKaU2U84GoGZtH2nxYXFHe8sL9p7D3wvXmYJJZqcCgcyvbeQVnkWs4ICV8DcQ-ldfAZ90XMdgO6W0Elolbnc3sdyjn-N7gQQfzYV1dwZpLEcDu8S9gf6pPgXW7eY0PcPi3KbDnZLsj4URHLDtIVwD7ijEcaJgpjRGdX9gKhi36piGC-ghWgZAVggQMgKzXDmXUtlEmClT4cpYxoA-u4N6q67CQs7CEsDe70I5_b_jjKflI')"></div>
+<div class="absolute inset-0 bg-slate-900/5 group-hover:bg-primary/10 transition-colors"></div>
+</div>
+<p class="font-bold text-slate-700 group-hover:text-primary">Sports</p>
+</a>
+</div>
+</div>
+</section>
+<section class="py-16 px-4 bg-bg-main">
+<div class="max-w-[1200px] mx-auto">
+<div class="flex items-end justify-between mb-10">
+<div>
+<h2 class="text-3xl font-bold text-slate-900 tracking-tight">Trending Products</h2>
+<p class="text-slate-500">Top picks based on recent community activity</p>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="product-card group bg-white border border-border-light rounded-xl overflow-hidden shadow-subtle p-4">
+<div class="relative w-full aspect-[4/5] bg-bg-main rounded-lg overflow-hidden mb-4">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3OJx2NwVvmNyZew3CuDkZD9w3fJKMbSQr76mFmKoeE961lN_w6Swh57GQGy6jnrVocnQ-1Ow1kjiC0_wOTJGWrsfkAxmD0oC4VyNnR-Nsni6nBp2ZLSr0D_ehHMgT20wxUVKAiLdS_DrHWlxlVyKJcS2M5yc2-5UZHKyJ2uVj0WUmEXftipsCscI5NIE-bJuLrKIncpoMfwevHqAa8W3NqxKWh8td3Pl8QdbBZRQZMd5sg2uXOImjJGvi1aiKurWEGwszekQYajo')"></div>
+<div class="absolute top-3 left-3 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded">HOT</div>
+<button class="absolute bottom-3 right-3 w-10 h-10 bg-white rounded-full shadow-card flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<div class="space-y-2">
+<p class="text-xs font-medium text-slate-400">Electronics</p>
+<h3 class="font-bold text-slate-800 line-clamp-1">Premium Wireless Headphones</h3>
+<div class="flex items-center gap-1 text-yellow-400">
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm">star</span>
+<span class="text-xs text-slate-400 ml-1">(4.0)</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<p class="text-lg font-black text-primary">$199.00</p>
+<span class="material-symbols-outlined text-slate-300 hover:text-red-500 cursor-pointer transition-colors">favorite</span>
+</div>
+</div>
+</div>
+<div class="product-card group bg-white border border-border-light rounded-xl overflow-hidden shadow-subtle p-4">
+<div class="relative w-full aspect-[4/5] bg-bg-main rounded-lg overflow-hidden mb-4">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCz3Lu7kwkFPNydvZOaVsZMHBUU0rZuNjqi45MS3uNDr9f52ZmsNKP1-U54yzBcu_RKk4K2BgKqier7La15eeDmkmSHM0Em7xkVZlXbuUwVmK3CofiPQH_bl03UbAN2ac0Mg0hwHW_dBYWcq8hqTpYu4oxGS0N7bYxwFRbA2BBolLgwu_dA-QI1GT8eirb7PydyyVfHWKqLynmZ7VyHf7kEhwlh3O1VTLALgq_q4A6px85TPnqYdIfbn12Os8CFS0q6taMbxdv88pw')"></div>
+<div class="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded">20% OFF</div>
+<button class="absolute bottom-3 right-3 w-10 h-10 bg-white rounded-full shadow-card flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<div class="space-y-2">
+<p class="text-xs font-medium text-slate-400">Accessories</p>
+<h3 class="font-bold text-slate-800 line-clamp-1">Minimalist Quartz Watch</h3>
+<div class="flex items-center gap-1 text-yellow-400">
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="text-xs text-slate-400 ml-1">(5.0)</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-baseline gap-2">
+<p class="text-lg font-black text-primary">$89.00</p>
+<p class="text-sm text-slate-400 line-through">$110.00</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 hover:text-red-500 cursor-pointer transition-colors">favorite</span>
+</div>
+</div>
+</div>
+<div class="product-card group bg-white border border-border-light rounded-xl overflow-hidden shadow-subtle p-4">
+<div class="relative w-full aspect-[4/5] bg-bg-main rounded-lg overflow-hidden mb-4">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAnG477upBOT0qjkdimooW8D7JuKji3XiY8LnEEFZ_u8siRE1UmyNhzSZVP-txYxuCogIYPA1DvCriSw75ryk56W1dxUjidse7RuQY6mUaP1xCNkq8uMIDLMo620J32n6SAtMszicNGTeDV753vzZbWjeqkVC80z6EzNIiMTqIqYhlIGAwa9-Xt5U-UMHBLCxF8IuGVETTwBo7LAFK_CI-5S02xIQDa_oj6_c6UvPiWiQFgl_pNzgd_nuv8c3QJqIcInv9SdDLZfYI')"></div>
+<button class="absolute bottom-3 right-3 w-10 h-10 bg-white rounded-full shadow-card flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<div class="space-y-2">
+<p class="text-xs font-medium text-slate-400">Fashion</p>
+<h3 class="font-bold text-slate-800 line-clamp-1">Velocity Run Sneakers</h3>
+<div class="flex items-center gap-1 text-yellow-400">
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm">star_half</span>
+<span class="text-xs text-slate-400 ml-1">(4.5)</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<p class="text-lg font-black text-primary">$125.00</p>
+<span class="material-symbols-outlined text-slate-300 hover:text-red-500 cursor-pointer transition-colors">favorite</span>
+</div>
+</div>
+</div>
+<div class="product-card group bg-white border border-border-light rounded-xl overflow-hidden shadow-subtle p-4">
+<div class="relative w-full aspect-[4/5] bg-bg-main rounded-lg overflow-hidden mb-4">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCt_MR0wUXrIBYbF8AabsMlLvMr6uBj8qBCYHBo-grd0DefyBIV3F_sWJnqDvT_P3s-7OaxFG4aDJ1G7oH8LBpu3qqZDPCsf87aMy4LT6ZNsC9E8OkONgdeR3koYoWbNeZJm7cUAbNhj2TALw5jWTBFtl42QwPhlaKSf1t4Sh6eEagUr15ZWXY-JiXkCNYtv_1fVIWNvxGWpQLLhsbaLcIzsGwfOZSgIT6zxVC1CP-_iiWSkS4WxaaqtrIpE_rF1n4AK8OU00gir_g')"></div>
+<button class="absolute bottom-3 right-3 w-10 h-10 bg-white rounded-full shadow-card flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<div class="space-y-2">
+<p class="text-xs font-medium text-slate-400">Home</p>
+<h3 class="font-bold text-slate-800 line-clamp-1">Smart Air Purifier Gen 3</h3>
+<div class="flex items-center gap-1 text-yellow-400">
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="material-symbols-outlined text-sm fill-current">star</span>
+<span class="text-xs text-slate-400 ml-1">(5.0)</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<p class="text-lg font-black text-primary">$249.00</p>
+<span class="material-symbols-outlined text-slate-300 hover:text-red-500 cursor-pointer transition-colors">favorite</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-16 px-4 bg-white">
+<div class="max-w-[1200px] mx-auto bg-primary rounded-[2rem] p-8 md:p-16 flex flex-col md:flex-row items-center gap-10 overflow-hidden relative shadow-card">
+<div class="flex-1 space-y-6 relative z-10">
+<h2 class="text-3xl md:text-5xl font-black text-white leading-tight">Start Selling on <br/>BizBhar Today</h2>
+<p class="text-slate-100/90 bg-white/10 backdrop-blur-md p-6 rounded-2xl text-lg border border-white/20">
+                    Join over 5,000 successful entrepreneurs. List your products, manage orders, and grow your brand with our powerful seller tools.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-accent text-slate-900 px-8 py-4 rounded-xl font-bold hover:opacity-90 transition-all shadow-subtle">
+                        Register as Seller
+                    </button>
+<button class="border border-white/30 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/10 transition-all">
+                        Learn More
+                    </button>
+</div>
+</div>
+<div class="flex-1 relative z-10 w-full md:w-auto">
+<div class="bg-white/10 backdrop-blur-xl p-4 rounded-3xl border border-white/20 shadow-2xl">
+<div class="w-full aspect-video rounded-2xl bg-bg-main overflow-hidden">
+<div class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBS5-tWS4evT9AkgSAmu60BoXrnANNov7NX6-RkMwXMoTfffFUb5-uMI9czPutp1ewrWgaTGglMFFYAsHk1KLH8nrShgqQrBfxBg8A2fedGtsE2hXJHNhzo_wTNgh9yNJQ75CXJ1nRWSl58VKjoUj7Ac0a-OQSQqVx8DAkAT1RpOzjI2DVW7jRWhE-Vea4CxebokCL5E1xDu9y2D40apunboVGt8zrASLFtwclMwDDVSW-UIKt4XScF-p3fW3Pecnsf9SZQpf8zEho')"></div>
+</div>
+</div>
+</div>
+<div class="absolute -top-20 -right-20 w-80 h-80 bg-accent/20 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-20 -left-20 w-80 h-80 bg-black/10 rounded-full blur-3xl"></div>
+</div>
+</section>
+</main>
+<footer class="bg-slate-950 text-slate-400 py-16 px-4">
+<div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="space-y-6">
+<div class="flex items-center gap-2 text-white">
+<span class="material-symbols-outlined text-3xl font-bold text-accent">rocket_launch</span>
+<h2 class="text-2xl font-extrabold tracking-tight">BizBhar</h2>
+</div>
+<p class="text-sm leading-relaxed">
+                BizBhar is the leading multi-vendor marketplace platform connecting passionate sellers with millions of buyers worldwide.
+            </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-primary transition-colors text-white" href="#">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
+</a>
+<a class="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-primary transition-colors text-white" href="#">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+</div>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Shop</h4>
+<ul class="space-y-4 text-sm">
+<li><a class="hover:text-accent transition-colors" href="#">Categories</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Best Sellers</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">New Arrivals</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Flash Sales</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Sellers</h4>
+<ul class="space-y-4 text-sm">
+<li><a class="hover:text-accent transition-colors" href="#">Sell on BizBhar</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Seller Dashboard</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Seller Protection</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Resources</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Newsletter</h4>
+<p class="text-xs mb-4">Get the latest deals and updates from BizBhar directly in your inbox.</p>
+<div class="flex gap-2">
+<input class="bg-white/5 border border-white/10 focus:ring-1 focus:ring-accent focus:border-accent rounded-lg text-sm flex-1 px-4 py-3 outline-none" placeholder="Email address" type="email"/>
+<button class="bg-primary text-white p-3 rounded-lg hover:opacity-90">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+<div class="max-w-[1200px] mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+<p>© 2024 BizBhar Marketplace. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-white transition-colors" href="#">Cookie Policy</a>
+</div>
+</div>
+</footer>
+
+</body></html>

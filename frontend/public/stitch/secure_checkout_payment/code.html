@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Secure Checkout | BizBhar</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#2563eb",
+              "primary-hover": "#1d4ed8",
+              "background-light": "#f8fafc",
+              "background-dark": "#0f172a",
+              "accent-blue": "#dbeafe",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            }
+            body {
+                font-family: 'Inter', sans-serif;
+            }
+        }
+        .card-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+        }
+        .stripe-input-focus:focus-within {
+            border-color: #2563eb;
+            ring: 2px;
+            ring-color: #dbeafe;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<header class="w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="text-primary">
+<svg class="size-8" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-800 dark:text-white">BizBhar</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Back to Cart</a>
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Help</a>
+<div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
+<div class="flex items-center gap-2 px-3 py-1 bg-slate-50 dark:bg-slate-800/50 rounded-full border border-slate-100 dark:border-slate-800">
+<span class="material-symbols-outlined text-sm text-green-500">lock</span>
+<span class="text-xs text-slate-600 dark:text-slate-400 font-semibold uppercase tracking-wider">Secure Checkout</span>
+</div>
+</nav>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-6 py-10">
+<div class="flex items-center gap-3 mb-10 text-sm">
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Cart</a>
+<span class="material-symbols-outlined text-xs text-slate-400">chevron_right</span>
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Information</a>
+<span class="material-symbols-outlined text-xs text-slate-400">chevron_right</span>
+<span class="font-bold text-slate-900 dark:text-white">Payment</span>
+</div>
+<div class="flex flex-col lg:flex-row gap-8">
+<div class="flex-1 space-y-6">
+<section class="bg-white dark:bg-slate-900 rounded-2xl p-8 card-shadow border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+                        Shipping Address
+                    </h2>
+<button class="text-primary text-sm font-semibold hover:text-primary-hover">Use saved</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">First Name</label>
+<input class="w-full h-11 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 transition-all" placeholder="John" type="text"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Last Name</label>
+<input class="w-full h-11 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 transition-all" placeholder="Doe" type="text"/>
+</div>
+<div class="flex flex-col gap-1.5 md:col-span-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Address</label>
+<input class="w-full h-11 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 transition-all" placeholder="123 Blue Ribbon Road" type="text"/>
+</div>
+<div class="flex flex-col gap-1.5 md:col-span-2">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Apartment, suite, etc. (optional)</label>
+<input class="w-full h-11 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 transition-all" placeholder="Suite 405" type="text"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">City</label>
+<input class="w-full h-11 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 transition-all" placeholder="New York" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">State</label>
+<select class="w-full h-11 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 transition-all">
+<option>NY</option>
+<option>CA</option>
+<option>TX</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Zip Code</label>
+<input class="w-full h-11 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 transition-all" placeholder="10001" type="text"/>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-white dark:bg-slate-900 rounded-2xl p-8 card-shadow border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+                        Secure Payment
+                    </h2>
+<div class="flex gap-2">
+<img alt="Visa" class="h-5 grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiG5oDiwKzMjbcvokBNaq_W5T1ga1KuvS8dhp434gIyoMEjcO8t0plQZcz6HQo2b2eioRQJLKCXv9mNRfc8qOWQvNXhW4gEZZ5S0mQt2MuXKZry8nw9ZKaxjy9wJDxnN9G0GIYN8gUoWTMF9-hYYgm_2SCIYs2OHCbJqJzXIuWKDL-rCgkWbKcePVdKXyjHoLIvPzdwuuYdMO_FR38c5pNJU1MNe0J5uSejdPuzagivilJ5YlGoZ-3WsiZ51KoqGb1ao1OclrGp-Q"/>
+<img alt="Mastercard" class="h-5 grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwQL5wECl93FOJGPZBFYpMsjcgpqYF9wUwJ6RuTVo2-Onr0EX-7-KhERTdJWYGHsDoa3AEwW0qL8fopZRfo4RAhlwEL32_J2PXHvkamdKHXGs0I2I4b08SxUycrFK9gExA4iSqXCkNNru3qRoJIpMbVqNQLQweuQBdAKMQumwdc4IG2k1HGklb4gouAxXdLC2lmzepjyn8clxrn6z1D4Asdlkf4ICVooAAo7mBz-tlNQZQ7regfNdZGUWwLbts1PdaLMwuHSnhCFE"/>
+</div>
+</div>
+<p class="text-slate-500 text-sm mb-8">All transactions are secure and encrypted for your protection.</p>
+<div class="space-y-4">
+<div class="border-2 border-primary bg-primary/[0.02] rounded-xl p-6">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">credit_card</span>
+<span class="font-bold text-slate-800 dark:text-white">Credit or Debit Card</span>
+</div>
+<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-3 flex flex-col md:flex-row md:items-center gap-3 stripe-input-focus transition-all shadow-sm">
+<div class="flex-1 flex items-center gap-3 px-1">
+<span class="material-symbols-outlined text-slate-400 text-xl">payment</span>
+<input class="bg-transparent border-none focus:ring-0 p-0 w-full text-base placeholder-slate-400" maxlength="19" placeholder="Card number" type="text"/>
+</div>
+<div class="flex gap-4 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-700 pt-3 md:pt-0 md:pl-4">
+<input class="bg-transparent border-none focus:ring-0 p-0 w-20 text-base placeholder-slate-400" maxlength="5" placeholder="MM / YY" type="text"/>
+<input class="bg-transparent border-none focus:ring-0 p-0 w-12 text-base placeholder-slate-400" maxlength="4" placeholder="CVC" type="text"/>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-3">
+<input class="w-4 h-4 rounded text-primary focus:ring-primary border-slate-300" id="save-card" type="checkbox"/>
+<label class="text-sm text-slate-600 dark:text-slate-400" for="save-card">Save my card for future purchases</label>
+</div>
+</div>
+<div class="border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">account_balance_wallet</span>
+<span class="font-semibold text-slate-700 dark:text-slate-300">Digital Wallet</span>
+</div>
+<span class="material-symbols-outlined text-slate-400">expand_more</span>
+</div>
+</div>
+</div>
+</section>
+<div class="pt-4">
+<button class="w-full md:w-auto px-16 h-14 bg-primary text-white rounded-xl font-bold text-lg hover:bg-primary-hover active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-xl">lock</span>
+                    Pay $2,349.00
+                </button>
+<div class="mt-5 flex items-start gap-2 text-xs text-slate-500 max-w-lg">
+<span class="material-symbols-outlined text-sm shrink-0">info</span>
+<p>By completing this purchase, you agree to our <a class="text-primary hover:underline" href="#">Terms of Service</a> and confirm you have read our <a class="text-primary hover:underline" href="#">Privacy Policy</a>.</p>
+</div>
+</div>
+</div>
+<aside class="w-full lg:w-[400px]">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 sticky top-24 card-shadow">
+<h3 class="text-lg font-bold mb-8 text-slate-900 dark:text-white">Order Summary</h3>
+<div class="space-y-5 mb-8">
+<div class="flex gap-4">
+<div class="size-16 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
+<img alt="Laptop" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnPn0JxFlmSOrZIwjcTNnuBQ3Zdh_eqZ14FD4gGeGzm4LddVf6F5Q7SOQku9sF_BDn8KPuK3JAwFP-TWtGs0t-5E1nVwhVZnO4pQBtz6-0HJt-kfWmgqpCxzu9gt6Eck8guQmNuc81DFtWUmPR703L3cEs02KuwnoAzkYYXLtij0Ajv6mRxRvw-ZFGtR6BpK94EwXcekAQHhkqN2f7EQwn9vcPNKp7DBsd5_mieOuqQNVem9f_3SmhK0P804E94onEQtsgXYeHeik"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">MacBook Pro 14" M3 Chip</p>
+<p class="text-xs text-slate-500">Space Black | 1TB SSD</p>
+<p class="text-sm font-semibold mt-1 text-slate-900 dark:text-white">$1,999.00</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="size-16 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
+<img alt="Tablet" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANHhbbM8ZSDkCJgHeECcTHom9M6eLi3zFGK_RV0stxWHWRoKhyHsAeSFOlvVMwAMkodrgOSmjnuk4CZ7xJhhpArijDWDwh4VOJbmIJ-K0WSuHhnAFSzMHmjvkR6DlXp4Ix3Gc0wbX4desWV5Qm9tAK9dvj3snYtOV2mEdGhe-V9AmHOIitusWYkaYInpVJnhwD22Tgfa3i6yuksWT3OLsVm6kJ0pLteYS-q_FDZ70KLMJdUEOVtmfLfXzatLk3PzOWtj1IqdOOtDg"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">iPad Pro 11-inch</p>
+<p class="text-xs text-slate-500">Space Gray | 256GB</p>
+<p class="text-sm font-semibold mt-1 text-slate-900 dark:text-white">$799.00</p>
+</div>
+</div>
+</div>
+<div class="flex gap-2 mb-8">
+<input class="flex-1 h-10 rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary px-4" placeholder="Discount code" type="text"/>
+<button class="px-5 h-10 bg-slate-900 dark:bg-primary text-white rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">Apply</button>
+</div>
+<div class="space-y-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+<div class="flex justify-between text-sm text-slate-500 dark:text-slate-400">
+<span>Subtotal</span>
+<span class="text-slate-900 dark:text-slate-200">$2,798.00</span>
+</div>
+<div class="flex justify-between text-sm text-slate-500 dark:text-slate-400">
+<span>Shipping</span>
+<span class="text-green-600 font-bold">FREE</span>
+</div>
+<div class="flex justify-between text-sm text-slate-500 dark:text-slate-400">
+<span>Taxes</span>
+<span class="text-slate-900 dark:text-slate-200">$249.22</span>
+</div>
+<div class="flex justify-between text-sm font-bold text-primary">
+<span>Discount (15%)</span>
+<span>-$419.70</span>
+</div>
+<div class="h-px bg-slate-100 dark:bg-slate-800 my-2"></div>
+<div class="flex justify-between items-end">
+<span class="text-lg font-bold text-slate-900 dark:text-white">Total</span>
+<div class="text-right">
+<span class="text-xs font-bold text-slate-400 block">USD</span>
+<span class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">$2,349.00</span>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 space-y-4">
+<div class="flex items-center gap-3 p-3 bg-blue-50 dark:bg-primary/10 rounded-lg border border-blue-100 dark:border-primary/20">
+<span class="material-symbols-outlined text-primary">verified</span>
+<span class="text-[11px] font-bold text-primary uppercase tracking-tight">Buyer Protection Guarantee</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-sm">local_shipping</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase">Fast Delivery</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-sm">history</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase">30-Day Returns</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<footer class="max-w-[1200px] mx-auto px-6 py-12 border-t border-slate-200 dark:border-slate-800 mt-12 text-center">
+<div class="flex flex-wrap justify-center gap-6 mb-6">
+<a class="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Refund Policy</a>
+<a class="text-sm text-slate-500 hover:text-primary transition-colors" href="#">Shipping Policy</a>
+</div>
+<p class="text-xs text-slate-400">© 2024 BizBhar Marketplace. Powered by secure payment infrastructure.</p>
+</footer>
+
+</body></html>

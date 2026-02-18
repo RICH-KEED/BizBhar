@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Seller Order Management | BizBhar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1e40af", // Deep Blue
+                        "primary-light": "#dbeafe",
+                        "accent-green": "#10b981", // Emerald/Green for completed steps
+                        "background-light": "#f8fafc", // Bluish-white
+                        "background-dark": "#0f172a", // Deep slate/blue
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        :root {
+            --primary: #1e40af;
+            --accent-green: #10b981;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white shadow-sm">
+<span class="material-symbols-outlined">storefront</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">BizBhar</h2>
+</div>
+<label class="flex flex-col min-w-64 !h-10">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-slate-500 flex border-none bg-slate-100 dark:bg-slate-800 items-center justify-center pl-4 rounded-l-lg" data-icon="search">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-slate-100 dark:bg-slate-800 focus:ring-1 focus:ring-primary/20 h-full placeholder:text-slate-500 px-4 rounded-r-lg pl-2 text-sm" placeholder="Search orders, customers, or SKUs..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-6">
+<nav class="flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary py-1" href="#">Orders</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Inventory</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Customers</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Analytics</a>
+</nav>
+<div class="flex gap-3 border-l border-slate-200 dark:border-slate-700 pl-6">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary-light hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary-light hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="Seller profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuArRRQbziV5huynN_C6iK2Z_yHHGGphQ5CvpzQV2QVnern2w88guYeVYmu8QoKI-wTRNhK7PLbSdhdpWcfHtfv8zOHLkcNAZ9FMgfr3Z1PKPxrlJ6PZbC-6-sRTaDqpGNVWJcTjefngZ2t0Vet71Fj7QHTjZUp6hnXrlTsu8JERbVMcO7CxNQqm8poBpnycevMMiFKW3HRMp7NNaYsi8KnJid4gIqfqCjTz6Xgy3dfGE22o2yrLZ2LLKNQBAUNrnFXVpBEIVZSTWpw");'></div>
+</div>
+</div>
+</header>
+<main class="flex flex-1 justify-center py-6">
+<div class="layout-content-container flex flex-col w-full max-w-[1280px] px-10 gap-6">
+<div class="flex justify-between items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-slate-500 text-sm">
+<span>Seller Hub</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-primary font-medium">Order Management</span>
+</div>
+<h1 class="text-2xl font-bold text-slate-900 dark:text-white">Order Management</h1>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-lg h-10 px-4 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700 text-slate-700 dark:text-slate-200 gap-2 text-sm font-bold hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-lg">download</span>
+<span>Export CSV</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 px-4 bg-primary text-white gap-2 text-sm font-bold hover:bg-primary/90 shadow-md transition-all">
+<span class="material-symbols-outlined text-lg">print</span>
+<span>Bulk Shipping Labels</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 text-sm font-medium">Pending Orders</p>
+<span class="p-1.5 bg-blue-100 text-blue-700 rounded-lg material-symbols-outlined text-sm">pending_actions</span>
+</div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold">24</p>
+<p class="text-accent-green text-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +5% from yesterday
+                        </p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 text-sm font-medium">Ready to Ship</p>
+<span class="p-1.5 bg-sky-100 text-sky-700 rounded-lg material-symbols-outlined text-sm">local_shipping</span>
+</div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold">12</p>
+<p class="text-rose-500 text-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">priority_high</span> 3 High Priority
+                        </p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 text-sm font-medium">Today's Revenue</p>
+<span class="p-1.5 bg-blue-50 text-primary rounded-lg material-symbols-outlined text-sm">payments</span>
+</div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold">$1,240.00</p>
+<p class="text-accent-green text-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +12% from avg
+                        </p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm border-l-4 border-l-accent-green">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 text-sm font-medium">Customer Satisfaction</p>
+<span class="p-1.5 bg-emerald-50 text-accent-green rounded-lg material-symbols-outlined text-sm">star</span>
+</div>
+<p class="text-slate-900 dark:text-white text-3xl font-bold">4.8</p>
+<p class="text-slate-400 text-xs font-medium">Based on 142 reviews</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="flex border-b border-slate-200 dark:border-slate-800 px-4 overflow-x-auto">
+<button class="flex items-center gap-2 border-b-2 border-transparent text-slate-500 px-4 py-4 text-sm font-bold hover:text-primary transition-all whitespace-nowrap">
+                            All Orders <span class="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full text-[10px]">142</span>
+</button>
+<button class="flex items-center gap-2 border-b-2 border-primary text-primary px-4 py-4 text-sm font-bold whitespace-nowrap">
+                            Pending <span class="bg-primary/10 px-2 py-0.5 rounded-full text-[10px]">24</span>
+</button>
+<button class="flex items-center gap-2 border-b-2 border-transparent text-slate-500 px-4 py-4 text-sm font-bold hover:text-primary transition-all whitespace-nowrap">
+                            Processing <span class="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full text-[10px]">18</span>
+</button>
+<button class="flex items-center gap-2 border-b-2 border-transparent text-slate-500 px-4 py-4 text-sm font-bold hover:text-primary transition-all whitespace-nowrap">
+                            Shipped <span class="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full text-[10px]">64</span>
+</button>
+<button class="flex items-center gap-2 border-b-2 border-transparent text-slate-500 px-4 py-4 text-sm font-bold hover:text-primary transition-all whitespace-nowrap">
+                            Delivered <span class="bg-emerald-50 text-accent-green px-2 py-0.5 rounded-full text-[10px]">32</span>
+</button>
+<button class="flex items-center gap-2 border-b-2 border-transparent text-slate-500 px-4 py-4 text-sm font-bold hover:text-primary transition-all whitespace-nowrap">
+                            Cancelled <span class="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full text-[10px]">4</span>
+</button>
+</div>
+<div class="p-4 flex flex-wrap items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-800/20">
+<div class="flex items-center gap-2">
+<div class="flex items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 focus-within:ring-1 focus-within:ring-primary/20">
+<span class="material-symbols-outlined text-slate-400 text-lg mr-2">filter_alt</span>
+<select class="bg-transparent border-none focus:ring-0 text-sm font-medium text-slate-700 dark:text-slate-200 p-0 pr-8">
+<option>Date Range: Last 30 Days</option>
+<option>Today</option>
+<option>This Week</option>
+<option>This Month</option>
+</select>
+</div>
+<div class="flex items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 focus-within:ring-1 focus-within:ring-primary/20">
+<select class="bg-transparent border-none focus:ring-0 text-sm font-medium text-slate-700 dark:text-slate-200 p-0 pr-8">
+<option>Shipping: All Carriers</option>
+<option>FedEx</option>
+<option>UPS</option>
+<option>DHL</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Bulk Actions:</span>
+<button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-lg px-3 py-1.5 text-xs font-bold hover:bg-slate-100 hover:text-primary transition-colors">Update Status</button>
+<button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-lg px-3 py-1.5 text-xs font-bold hover:bg-slate-100 hover:text-primary transition-colors">Print Packing Slip</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-y border-slate-200 dark:border-slate-800">
+<th class="p-4 w-10"><input class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/></th>
+<th class="p-4 text-xs font-bold text-slate-500 uppercase">Order ID</th>
+<th class="p-4 text-xs font-bold text-slate-500 uppercase">Date</th>
+<th class="p-4 text-xs font-bold text-slate-500 uppercase">Customer</th>
+<th class="p-4 text-xs font-bold text-slate-500 uppercase">Items</th>
+<th class="p-4 text-xs font-bold text-slate-500 uppercase">Amount</th>
+<th class="p-4 text-xs font-bold text-slate-500 uppercase">Status</th>
+<th class="p-4 text-xs font-bold text-slate-500 uppercase">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors cursor-pointer group">
+<td class="p-4"><input class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white font-bold text-sm">#ORD-94821</span>
+<span class="text-slate-400 text-xs">SKU: HM-90-BL</span>
+</div>
+</td>
+<td class="p-4 text-sm text-slate-600 dark:text-slate-400">Oct 24, 2023 <span class="block text-xs text-slate-400">09:42 AM</span></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden border border-primary/10">
+<img alt="James Wilson avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxN0gJKBcW7HOni505B-85BcQQXIc6gbzxQI4Am2VlfGNyRzC4c0yuyMwPyB4ehdJN2cK0FbSPoH8AXoqGHsaRbgaezO26BnaU-DMJlS2-8iRM7bbW_KoZx7rI6GyYTtj_9y6pRfMvC52GEBcFv_5NB2SKNJa7sxH2Iy_CI8s4FwWXjR3p1Lnt3CuObvZWtArR3Ssrmu8alGx1hL7hzyX56SHbfW6_vKjQwbwznfGJ13rGvcezuwwU0Ishh54JV2ATQiI1eu1StRo"/>
+</div>
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white font-medium text-sm">James Wilson</span>
+<span class="text-slate-400 text-xs">Austin, TX, USA</span>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm text-slate-600 dark:text-slate-400">3x Organic Cotton Tee</td>
+<td class="p-4 text-sm font-bold text-slate-900 dark:text-white">$124.50</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-100 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-900/50">
+                                        Pending
+                                    </span>
+</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<button class="bg-primary text-white text-[10px] font-bold px-3 py-1 rounded hover:bg-primary/90 flex items-center gap-1 uppercase tracking-wide transition-all shadow-sm">
+                                            Update Status <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+<button class="text-slate-400 hover:text-primary dark:hover:text-primary-light">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors cursor-pointer bg-blue-50/30 dark:bg-blue-900/5">
+<td class="p-4"><input class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white font-bold text-sm">#ORD-94818</span>
+<span class="text-slate-400 text-xs">SKU: LS-22-WH</span>
+</div>
+</td>
+<td class="p-4 text-sm text-slate-600 dark:text-slate-400">Oct 24, 2023 <span class="block text-xs text-slate-400">08:15 AM</span></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden border border-primary/10">
+<img alt="Sarah Chen avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiShO3UzXdkqCRE5NQh2_tgxqJMrcyFssAmsp2Xub8JmBeBlaH6nJG4P881g2cTtIuICZnyvprpPyM0ErbK60szNS_89-qSVixuazwwH98jd2kdYQ9CI3HMtqEC-eW7tRLD2fd8xuI2F83c9GF9W70Ii2qj7Gg0Hmj3UT6nf7A87Db2Twm6x55Y0ns1tnjUT5fSZWJKyCqZkogWxEyabbvQIN_tsmUmuqtHlkuXVVBCC6_drRT4X3RNXKlYcu-0g_ccJgkGbUpmg8"/>
+</div>
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white font-medium text-sm">Sarah Chen</span>
+<span class="text-slate-400 text-xs">San Francisco, CA</span>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm text-slate-600 dark:text-slate-400">1x Smart Watch Gen 5</td>
+<td class="p-4 text-sm font-bold text-slate-900 dark:text-white">$299.00</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-primary border border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/50">
+                                        Processing
+                                    </span>
+</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<button class="bg-primary text-white text-[10px] font-bold px-3 py-1 rounded hover:bg-primary/90 uppercase tracking-wide transition-all shadow-sm">
+                                            Update
+                                        </button>
+<button class="text-slate-400 hover:text-primary dark:hover:text-primary-light">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors cursor-pointer">
+<td class="p-4"><input class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white font-bold text-sm">#ORD-94810</span>
+<span class="text-slate-400 text-xs">SKU: FR-11-GR</span>
+</div>
+</td>
+<td class="p-4 text-sm text-slate-600 dark:text-slate-400">Oct 23, 2023 <span class="block text-xs text-slate-400">06:22 PM</span></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="text-xs font-bold text-primary">MA</span>
+</div>
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white font-medium text-sm">Michael Adams</span>
+<span class="text-slate-400 text-xs">New York, NY</span>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm text-slate-600 dark:text-slate-400">5x Metal Clips Box</td>
+<td class="p-4 text-sm font-bold text-slate-900 dark:text-white">$45.00</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-accent-green border border-emerald-100 dark:bg-emerald-900/20 dark:text-accent-green dark:border-emerald-900/50">
+                                        Delivered
+                                    </span>
+</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<button class="bg-primary text-white text-[10px] font-bold px-3 py-1 rounded hover:bg-primary/90 uppercase tracking-wide transition-all shadow-sm">
+                                            Update
+                                        </button>
+<button class="text-slate-400 hover:text-primary dark:hover:text-primary-light">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors cursor-pointer">
+<td class="p-4"><input class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white font-bold text-sm">#ORD-94805</span>
+<span class="text-slate-400 text-xs">SKU: KT-09-RD</span>
+</div>
+</td>
+<td class="p-4 text-sm text-slate-600 dark:text-slate-400">Oct 23, 2023 <span class="block text-xs text-slate-400">03:45 PM</span></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden border border-primary/10">
+<img alt="Robert Fox avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjP-KsHMiRbqs4j4mynxKgOz1W2zZYcMi0o877O3XciAFWEYwU_MYhIJVkQehwthY0o4_WnRfmJ6njhSfV558UqQ-RHx5FO9lGhQuH6wXbbflKOw5KbbMWLQhCKBTgAts2E3eeF1dnf_DxjhBEYvHhm1RWSGj3XyOi2QZNEbff7g6Pccz-tZYuaD32DWo0x4wEfyjrKeJKzum-GVYmS1qgNKNB7oRbV0lLhXTWQnbdRXXI7LbeNKEAL23Swte4zR9JTpsMfpACL48"/>
+</div>
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white font-medium text-sm">Robert Fox</span>
+<span class="text-slate-400 text-xs">Miami, FL</span>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm text-slate-600 dark:text-slate-400">2x Kitchen Spatula</td>
+<td class="p-4 text-sm font-bold text-slate-900 dark:text-white">$24.99</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-100 dark:bg-amber-900/20 dark:text-amber-400">
+                                        Pending
+                                    </span>
+</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<button class="bg-primary text-white text-[10px] font-bold px-3 py-1 rounded hover:bg-primary/90 uppercase tracking-wide transition-all shadow-sm">
+                                            Update
+                                        </button>
+<button class="text-slate-400 hover:text-primary dark:hover:text-primary-light">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800">
+<span class="text-xs text-slate-500 font-medium">Showing 1-10 of 24 orders</span>
+<div class="flex gap-2">
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 hover:text-primary hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded border border-primary bg-primary text-white text-xs font-bold shadow-sm">1</button>
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 hover:text-primary hover:border-primary transition-all text-xs font-bold">2</button>
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 hover:text-primary hover:border-primary transition-all text-xs font-bold">3</button>
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 hover:text-primary hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<div class="hidden absolute top-[640px] right-[100px] w-52 bg-white dark:bg-slate-900 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-800 z-50 overflow-hidden">
+<div class="p-2 flex flex-col gap-1">
+<button class="flex items-center gap-2 px-3 py-2 text-sm text-amber-700 font-semibold hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded text-left transition-colors">
+<span class="material-symbols-outlined text-sm">schedule</span> Pending
+                </button>
+<button class="flex items-center gap-2 px-3 py-2 text-sm text-primary font-semibold bg-blue-50 dark:bg-blue-900/20 rounded text-left transition-colors">
+<span class="material-symbols-outlined text-sm">sync</span> Processing
+                </button>
+<button class="flex items-center gap-2 px-3 py-2 text-sm text-primary font-semibold hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded text-left transition-colors">
+<span class="material-symbols-outlined text-sm">local_shipping</span> Shipped
+                </button>
+<button class="flex items-center gap-2 px-3 py-2 text-sm text-accent-green font-semibold hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded text-left transition-colors">
+<span class="material-symbols-outlined text-sm">check_circle</span> Delivered
+                </button>
+<div class="border-t border-slate-100 dark:border-slate-800 my-1"></div>
+<button class="flex items-center gap-2 px-3 py-2 text-sm text-rose-600 font-semibold hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded text-left transition-colors">
+<span class="material-symbols-outlined text-sm">cancel</span> Cancelled
+                </button>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>

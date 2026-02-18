@@ -1,0 +1,34 @@
+# Backend
+backend/target/
+backend/.mvn/
+backend/*.jar
+backend/*.war
+backend/.env
+backend/.idea/
+backend/*.iml
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Dependencies
+node_modules/
