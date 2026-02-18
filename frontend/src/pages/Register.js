@@ -81,9 +81,9 @@ const Register = () => {
           <div className="z-10">
             <div className="flex gap-4 mb-8">
               <div className="flex -space-x-3">
-                <div className="w-10 h-10 rounded-full border-2 border-primary bg-blue-200"></div>
-                <div className="w-10 h-10 rounded-full border-2 border-primary bg-blue-300"></div>
-                <div className="w-10 h-10 rounded-full border-2 border-primary bg-blue-400"></div>
+                <img alt="Buyer" className="w-10 h-10 rounded-full border-2 border-primary bg-zinc-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAjnWmUPV92sVi6HZZGopVsQx3hYKes7gQ36ECawOIqyJ3CF_8h_lDCkHMdjuZbZ2w3FhzAP6ueqlDH9glHebdYNDp5wmHQskIapdtI0fIBBfASVF4E3NsL4SoLkLDD0fY0hWLFOmL3A3IwOCmV9DjitCWHK_SRpliTfXNkz94nMERpvi9TaRijelaNC-6qVQnwcAMWuT8Ti7ZrPcXQpH4i4SWR3o-kovpzFeT-of5W2PklQlU8fNkZ7gCS8hbOTVG5quHHWkGVu8"/>
+                <img alt="Seller" className="w-10 h-10 rounded-full border-2 border-primary bg-zinc-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7mjQ_Fxfr88Hlj-6-wmWdvmBChSjQ04y77-A6-1gvzdnt1mgFZ2MHiT8794xtXnxuBvAAxr368fAnwyPcuzrqErF5KbGRAtPSr7ljVQMvxbOshRUhl6tBkhLmaZ14U7Y2ZpIrUX7_XEAYiim2Tat1TvC1ON-OZSEZTr6RwSe6tkEQyvf4JH019QSBBGvH1GmltKuIpJOtAyEvM2lxpIVsDRZ5-ehRFbFyZYK295zu87cMB18uh8Hgz8t9peV6aUcxVSs8TBHcbFI"/>
+                <img alt="Expert" className="w-10 h-10 rounded-full border-2 border-primary bg-zinc-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbT-CO2hYXQgRozORyGfFS1c7sR0PUq5S1tzUPNapvPqZaY-n18KB3TE71A0Vq89LZuyfYpar8txf31i7sHBzcCsnoEbGDIGvuFQiCE_huywzCK_nB28AeL_p6uJa-zuoANF6hQqW_wbOm_3ircSmTud7n23FXqHXMomeK9sdVjI2zorHRIbdUlHtxN-56v0hyd9Tg9V7R0pXNJnByo_BH3a7CEt5YYJnspX3BgB_Kn8llUVEmiKsb8pPhptGA7Sv4phF6lrx0H4Y"/>
               </div>
               <div className="text-sm">
                 <p className="font-bold text-white">50k+ Businesses</p>

@@ -30,4 +30,11 @@ export const authAPI = {
   getProfile: () => api.get('/profile'),
 };
 
+// Shop endpoints
+export const shopAPI = {
+  createShop: (data) => api.post('/shops', data),
+  getMyShop: () => api.get('/shops/my-shop'),
+  getShopStats: (id) => api.get(`/shops/${id}/stats`),
+};
+
 export default api;
