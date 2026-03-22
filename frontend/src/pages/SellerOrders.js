@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { orderAPI, shopAPI } from '../services/api';
 import { getUser } from '../utils/auth';
+import { formatInr } from '../utils/format';
+import SellerLayout from '../components/SellerLayout';
+import { LoadingState, EmptyState, AlertBanner, Card } from '../components/ui';
 
 const NEXT_STATUS = {
   PENDING: 'SHIPPED',
@@ -34,9 +36,6 @@ const SellerOrders = () => {
     load();
   }, []);
 
-  const formatPrice = (p) =>
-    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Number(p));
-
   const advance = async (order) => {
     const next = NEXT_STATUS[(order.status || '').toUpperCase()];
     if (!next) return;
@@ -50,39 +49,47 @@ const SellerOrders = () => {
 
   if (user?.role !== 'SELLER') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-background-light">
         <p className="text-slate-600">Seller account required.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f9fafb] px-4 py-10">
-      <div className="max-w-3xl mx-auto">
-        <Link to="/seller/dashboard" className="text-primary font-bold text-sm mb-4 inline-block">
-          ← Dashboard
-        </Link>
-        <h1 className="text-3xl font-black text-slate-900 mb-2">Store orders</h1>
-        {shop && <p className="text-slate-500 mb-8">{shop.name}</p>}
+    <SellerLayout
+      title="Store orders"
+      subtitle={shop ? shop.name : 'Incoming orders from buyers'}
+    >
+      <div className="p-6 lg:p-8 max-w-4xl">
+        {loading && <LoadingState message="Loading orders…" />}
 
-        {loading && <p className="text-slate-500">Loading…</p>}
-        {error && <p className="text-red-600">{String(error)}</p>}
+        {!loading && error && (
+          <AlertBanner variant="error" className="mb-6" icon="error">
+            {String(error)}
+          </AlertBanner>
+        )}
 
         {!loading && !error && orders.length === 0 && (
-          <p className="text-slate-500">No orders yet.</p>
+          <EmptyState
+            icon="inbox"
+            title="No orders yet"
+            description="When buyers complete checkout, their orders will show up here."
+          />
         )}
 
         <div className="space-y-4">
           {orders.map((o) => (
-            <div key={o.id} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <Card key={o.id} className="!p-6">
               <div className="flex flex-wrap justify-between gap-2">
                 <div>
-                  <p className="text-xs font-bold text-slate-400 uppercase">Order #{o.id}</p>
-                  <p className="text-sm text-slate-500">{o.createdAt ? new Date(o.createdAt).toLocaleString() : ''}</p>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wide">Order #{o.id}</p>
+                  <p className="text-sm text-slate-500">
+                    {o.createdAt ? new Date(o.createdAt).toLocaleString() : ''}
+                  </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-black text-primary">{formatPrice(o.total)}</p>
-                  <span className="inline-block mt-1 text-xs font-bold px-2 py-1 rounded bg-slate-100 text-slate-700">
+                  <p className="text-lg font-black text-primary">{formatInr(o.total)}</p>
+                  <span className="inline-block mt-1 text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">
                     {o.status}
                   </span>
                 </div>
@@ -91,16 +98,17 @@ const SellerOrders = () => {
                 <button
                   type="button"
                   onClick={() => advance(o)}
-                  className="mt-4 px-4 py-2 rounded-lg bg-primary text-white text-sm font-bold"
+                  className="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white text-sm font-bold hover:opacity-95"
                 >
+                  <span className="material-symbols-outlined text-[18px]">local_shipping</span>
                   Mark as {NEXT_STATUS[(o.status || '').toUpperCase()]}
                 </button>
               )}
-            </div>
+            </Card>
           ))}
         </div>
       </div>
-    </div>
+    </SellerLayout>
   );
 };
 

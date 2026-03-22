@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { productAPI } from '../services/api';
-import { isAuthenticated, getUser, logout } from '../utils/auth';
-import { useNavigate } from 'react-router-dom';
+import { PageShell, PageSection, PageHeader, Card, LoadingState, EmptyState, AlertBanner } from '../components/ui';
+import ProductCard from '../components/ProductCard';
 
 const CATEGORIES = ['', 'Electronics', 'Fashion', 'Home & Living', 'Beauty', 'Sports', 'General'];
 
@@ -13,8 +13,6 @@ const ProductList = () => {
   const [error, setError] = useState('');
   const [search, setSearch] = useState(searchParams.get('search') || '');
   const [category, setCategory] = useState(searchParams.get('category') || '');
-  const navigate = useNavigate();
-  const user = isAuthenticated() ? getUser() : null;
 
   useEffect(() => {
     const s = searchParams.get('search') || '';
@@ -41,115 +39,92 @@ const ProductList = () => {
     setSearchParams(next);
   };
 
-  const formatPrice = (p) =>
-    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Number(p));
-
   return (
-    <div className="min-h-screen bg-[#f9fafb] text-slate-900">
-      <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 px-4 md:px-10 py-3">
-        <div className="max-w-[1200px] mx-auto flex items-center justify-between gap-4">
-          <Link to="/" className="text-xl font-extrabold text-primary">
-            BizBhar
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link to="/products" className="text-sm font-semibold text-slate-700">
-              All products
-            </Link>
-            {user?.role === 'SELLER' && (
-              <Link to="/seller/products/add" className="text-sm font-semibold text-primary">
-                Add product
-              </Link>
-            )}
-            {user ? (
-              <>
-                <Link to="/profile" className="text-sm font-semibold text-slate-600">
-                  Profile
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => {
-                    logout();
-                    navigate('/login');
-                  }}
-                  className="text-sm font-semibold text-slate-600"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <Link to="/login" className="text-sm font-bold text-primary">
-                Login
-              </Link>
-            )}
+    <PageShell>
+      <PageSection wide>
+        <PageHeader
+          eyebrow="Marketplace"
+          title="Browse products"
+          subtitle="Search and filter by category. Every listing comes from verified sellers on BizBhar."
+        />
+
+        <Card className="mb-10 !p-0 overflow-hidden" padding="">
+          <div className="p-5 sm:p-6 border-b border-slate-100/90 bg-gradient-to-r from-slate-50/80 to-white">
+            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-primary mb-1">Filters</p>
+            <p className="text-sm text-slate-500">Refine by keyword and category</p>
           </div>
-        </div>
-      </header>
+          <form onSubmit={applyFilters} className="flex flex-col lg:flex-row gap-4 p-5 sm:p-6">
+            <div className="flex-1 relative">
+              <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xl pointer-events-none">
+                search
+              </span>
+              <input
+                className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-200/90 bg-white text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all shadow-sm"
+                placeholder="Search by name or description…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <select
+              className="lg:w-56 rounded-xl border border-slate-200/90 px-4 py-3.5 bg-white font-semibold text-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none shadow-sm"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c || 'all'} value={c}>
+                  {c || 'All categories'}
+                </option>
+              ))}
+            </select>
+            <button type="submit" className="btn-primary btn-primary--filter">
+              Apply
+            </button>
+          </form>
+        </Card>
 
-      <main className="max-w-[1200px] mx-auto px-4 py-10">
-        <h1 className="text-3xl font-black text-slate-900 mb-2">Browse products</h1>
-        <p className="text-slate-500 mb-8">Search and filter by category</p>
-
-        <form onSubmit={applyFilters} className="flex flex-col md:flex-row gap-4 mb-10">
-          <input
-            className="flex-1 rounded-xl border border-gray-200 px-4 py-3"
-            placeholder="Search by name or description..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <select
-            className="rounded-xl border border-gray-200 px-4 py-3 bg-white"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c || 'all'} value={c}>
-                {c || 'All categories'}
-              </option>
-            ))}
-          </select>
-          <button type="submit" className="rounded-xl bg-primary text-white font-bold px-8 py-3">
-            Apply
-          </button>
-        </form>
-
-        {loading && <p className="text-slate-500">Loading...</p>}
-        {error && <p className="text-red-600">{typeof error === 'string' ? error : JSON.stringify(error)}</p>}
-
-        {!loading && !error && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((p) => (
-              <Link
-                key={p.id}
-                to={`/products/${p.id}`}
-                className="group bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all"
-              >
-                <div className="relative aspect-[4/5] bg-gray-100">
-                  {p.imageUrl ? (
-                    <img src={p.imageUrl} alt={p.name} className="absolute inset-0 w-full h-full object-cover" />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">No image</div>
-                  )}
-                  {p.stock === 0 && (
-                    <span className="absolute top-3 left-3 bg-slate-900 text-white text-xs font-bold px-2 py-1 rounded">
-                      Out of stock
-                    </span>
-                  )}
-                </div>
-                <div className="p-4 space-y-1">
-                  <p className="text-xs font-medium text-slate-400">{p.category}</p>
-                  <h3 className="font-bold text-slate-800 line-clamp-2">{p.name}</h3>
-                  <p className="text-lg font-black text-primary">{formatPrice(p.price)}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+        {error && (
+          <AlertBanner variant="error" icon="error" className="mb-8">
+            {typeof error === 'string' ? error : JSON.stringify(error)}
+          </AlertBanner>
         )}
+
+        {loading && <LoadingState message="Loading products…" />}
 
         {!loading && !error && products.length === 0 && (
-          <p className="text-slate-500">No products match your filters.</p>
+          <EmptyState
+            icon="search_off"
+            title="No products match"
+            description={
+              search || category
+                ? 'Try clearing filters or search — or browse all categories.'
+                : 'No listings yet. Check back soon or register as a seller to add products.'
+            }
+          >
+            {(search || category) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch('');
+                  setCategory('');
+                  setSearchParams(new URLSearchParams());
+                }}
+                className="btn-primary btn-primary--compact"
+              >
+                Clear filters
+              </button>
+            )}
+          </EmptyState>
         )}
-      </main>
-    </div>
+
+        {!loading && !error && products.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+            {products.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        )}
+      </PageSection>
+    </PageShell>
   );
 };
 

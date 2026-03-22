@@ -34,6 +34,10 @@ export const isAuthenticated = () => {
   return !!getToken();
 };
 
+export const isSeller = () => getUser()?.role === 'SELLER';
+
+export const isBuyer = () => getUser()?.role === 'BUYER';
+
 // Logout
 export const logout = () => {
   removeToken();

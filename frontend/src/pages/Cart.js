@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { cartAPI, productAPI } from '../services/api';
-import { isAuthenticated } from '../utils/auth';
+import { isAuthenticated, isSeller } from '../utils/auth';
 import { getGuestCart, updateGuestQty, removeGuestItem } from '../utils/guestCart';
+import { formatInr } from '../utils/format';
+import { PageShell, PageSection, PageHeader, Card, AlertBanner, EmptyState, LoadingState } from '../components/ui';
 
 const Cart = () => {
   const [lines, setLines] = useState([]);
@@ -40,7 +42,7 @@ const Cart = () => {
             guest: true,
           });
         } catch {
-          // drop missing products
+          /* skip */
         }
       }
       setLines(enriched);
@@ -52,12 +54,14 @@ const Cart = () => {
   }, []);
 
   useEffect(() => {
+    if (isAuthenticated() && isSeller()) return;
     if (isAuthenticated()) loadServer();
     else loadGuest();
   }, [loadServer, loadGuest]);
 
-  const formatPrice = (p) =>
-    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Number(p));
+  if (isAuthenticated() && isSeller()) {
+    return <Navigate to="/seller/dashboard" replace />;
+  }
 
   const total = lines.reduce((sum, l) => sum + Number(l.price) * Number(l.quantity), 0);
 
@@ -94,102 +98,114 @@ const Cart = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f9fafb] text-slate-900">
-      <header className="border-b border-gray-200 bg-white px-4 py-3">
-        <div className="max-w-[960px] mx-auto flex justify-between items-center">
-          <Link to="/products" className="text-primary font-bold">
-            ← Continue shopping
-          </Link>
-          <Link to="/" className="text-sm font-semibold text-slate-600">
-            Home
-          </Link>
-        </div>
-      </header>
+    <PageShell>
+      <PageSection>
+        <PageHeader
+          eyebrow="Cart"
+          title="Your cart"
+          subtitle="Review items before checkout. Quantities sync when you sign in."
+          backTo="/products"
+          backLabel="Continue shopping"
+        />
 
-      <main className="max-w-[960px] mx-auto px-4 py-10">
-        <h1 className="text-3xl font-black mb-2">Your cart</h1>
         {!isAuthenticated() && (
-          <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 mb-6">
-            You are browsing as a guest. Sign in to save your cart to your account — it will merge when you log in.
-          </p>
+          <AlertBanner variant="warning" icon="info" className="mb-8">
+            You&apos;re browsing as a guest. Sign in to save your cart to your account — it merges when you log in.
+          </AlertBanner>
         )}
 
-        {loading && <p className="text-slate-500">Loading...</p>}
-        {error && <p className="text-red-600 mb-4">{String(error)}</p>}
+        {error && (
+          <AlertBanner variant="error" className="mb-6" icon="error">
+            {String(error)}
+          </AlertBanner>
+        )}
 
-        {!loading && lines.length === 0 && <p className="text-slate-500">Your cart is empty.</p>}
+        {loading && <LoadingState message="Loading your cart…" />}
+
+        {!loading && lines.length === 0 && (
+          <EmptyState
+            icon="shopping_cart"
+            title="Your cart is empty"
+            description="Browse the marketplace and add products you love."
+          >
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary text-white font-bold px-6 py-3 shadow-lg shadow-primary/20"
+            >
+              Browse products
+            </Link>
+          </EmptyState>
+        )}
 
         {!loading && lines.length > 0 && (
           <div className="space-y-4">
             {lines.map((line) => (
-              <div
-                key={line.cartItemId}
-                className="flex flex-col sm:flex-row gap-4 bg-white border border-gray-200 rounded-xl p-4 shadow-sm"
-              >
-                <div className="w-full sm:w-28 h-28 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+              <Card key={line.cartItemId} className="flex flex-col sm:flex-row gap-5 !p-5 sm:!p-6">
+                <div className="w-full sm:w-32 h-32 bg-slate-100 rounded-xl overflow-hidden shrink-0 border border-slate-100">
                   {line.imageUrl ? (
-                    <img src={line.imageUrl} alt={line.name} className="w-full h-full object-cover" />
+                    <img src={line.imageUrl} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-xs text-slate-400">No image</div>
+                    <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">No image</div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <Link to={`/products/${line.productId}`} className="font-bold text-slate-900 hover:text-primary">
+                  <Link to={`/products/${line.productId}`} className="font-bold text-lg text-slate-900 hover:text-primary">
                     {line.name}
                   </Link>
-                  <p className="text-sm text-slate-500">{line.category}</p>
-                  <p className="text-lg font-black text-primary mt-1">{formatPrice(line.price)}</p>
+                  <p className="text-sm text-slate-500 mt-0.5">{line.category}</p>
+                  <p className="text-xl font-black text-primary mt-2">{formatInr(line.price)}</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => changeQty(line, -1)}
-                    className="w-10 h-10 rounded-lg border border-gray-200 font-bold"
-                  >
-                    −
-                  </button>
-                  <span className="w-8 text-center font-bold">{line.quantity}</span>
-                  <button
-                    type="button"
-                    onClick={() => changeQty(line, 1)}
-                    disabled={line.stock != null && line.quantity >= line.stock}
-                    className="w-10 h-10 rounded-lg border border-gray-200 font-bold disabled:opacity-40"
-                  >
-                    +
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => remove(line)}
-                    className="text-sm text-red-600 font-bold ml-2"
-                  >
+                <div className="flex sm:flex-col items-center justify-between sm:justify-start gap-3 sm:min-w-[140px]">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => changeQty(line, -1)}
+                      className="w-10 h-10 rounded-xl border border-slate-200 font-bold hover:bg-slate-50"
+                    >
+                      −
+                    </button>
+                    <span className="w-10 text-center font-bold">{line.quantity}</span>
+                    <button
+                      type="button"
+                      onClick={() => changeQty(line, 1)}
+                      disabled={line.stock != null && line.quantity >= line.stock}
+                      className="w-10 h-10 rounded-xl border border-slate-200 font-bold hover:bg-slate-50 disabled:opacity-40"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <button type="button" onClick={() => remove(line)} className="text-sm font-bold text-red-600 hover:underline">
                     Remove
                   </button>
                 </div>
-              </div>
+              </Card>
             ))}
 
-            <div className="flex justify-between items-center pt-6 border-t border-gray-200">
-              <p className="text-xl font-black">Total</p>
-              <p className="text-2xl font-black text-primary">{formatPrice(total)}</p>
-            </div>
-
-            {isAuthenticated() && (
-              <Link
-                to="/checkout"
-                className="inline-block w-full sm:w-auto text-center bg-primary text-white font-bold px-8 py-4 rounded-xl"
-              >
-                Proceed to checkout
-              </Link>
-            )}
-            {!isAuthenticated() && (
-              <Link to="/login" className="inline-block text-center bg-slate-900 text-white font-bold px-8 py-4 rounded-xl">
-                Login to checkout
-              </Link>
-            )}
+            <Card variant="muted" className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 !p-6">
+              <div>
+                <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Order total</p>
+                <p className="text-3xl font-black text-primary">{formatInr(total)}</p>
+              </div>
+              {isAuthenticated() ? (
+                <Link
+                  to="/checkout"
+                  className="inline-flex justify-center items-center rounded-xl bg-primary text-white font-bold px-10 py-4 shadow-lg shadow-primary/25 hover:opacity-95"
+                >
+                  Proceed to checkout
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  className="inline-flex justify-center items-center rounded-xl bg-slate-900 text-white font-bold px-10 py-4 hover:bg-slate-800"
+                >
+                  Login to checkout
+                </Link>
+              )}
+            </Card>
           </div>
         )}
-      </main>
-    </div>
+      </PageSection>
+    </PageShell>
   );
 };
 

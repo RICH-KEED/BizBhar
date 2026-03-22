@@ -1,5 +1,11 @@
 const KEY = 'bizbhar_guest_cart';
 
+/** Quantity of this product already in guest cart (0 if none). */
+export function getGuestQty(productId) {
+  const line = getGuestCart().find((x) => Number(x.productId) === Number(productId));
+  return line ? Math.max(0, Number(line.quantity) || 0) : 0;
+}
+
 export function getGuestCart() {
   try {
     const raw = localStorage.getItem(KEY);

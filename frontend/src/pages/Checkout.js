@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { isSeller } from '../utils/auth';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { checkoutAPI } from '../services/api';
+import { PageShell, PageSection, PageHeader, Card, LoadingState, AlertBanner } from '../components/ui';
 
 function CheckoutForm() {
   const stripe = useStripe();
@@ -34,13 +36,13 @@ function CheckoutForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-lg">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <PaymentElement />
-      {err && <p className="text-red-600 text-sm">{err}</p>}
+      {err && <AlertBanner variant="error">{err}</AlertBanner>}
       <button
         type="submit"
         disabled={busy || !stripe}
-        className="w-full py-4 rounded-xl bg-primary text-white font-bold disabled:opacity-50"
+        className="w-full py-4 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20 disabled:opacity-50"
       >
         {busy ? 'Processing…' : 'Pay now'}
       </button>
@@ -55,6 +57,10 @@ const Checkout = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (isSeller()) {
+      setLoading(false);
+      return;
+    }
     checkoutAPI
       .createPaymentIntent()
       .then((res) => {
@@ -70,55 +76,65 @@ const Checkout = () => {
     return loadStripe(publishableKey);
   }, [publishableKey]);
 
+  if (isSeller()) {
+    return <Navigate to="/seller/dashboard" replace />;
+  }
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f9fafb]">
-        <p className="text-slate-500">Preparing checkout…</p>
-      </div>
+      <PageShell footer={false}>
+        <PageSection narrow>
+          <LoadingState message="Preparing secure checkout…" />
+        </PageSection>
+      </PageShell>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#f9fafb] px-4 py-12 max-w-lg mx-auto">
-        <p className="text-red-600 mb-4">{String(error)}</p>
-        <Link to="/cart" className="text-primary font-bold">
-          Back to cart
-        </Link>
-      </div>
+      <PageShell>
+        <PageSection narrow className="py-12">
+          <AlertBanner variant="error" icon="error" className="mb-6">
+            {String(error)}
+          </AlertBanner>
+          <Link to="/cart" className="font-bold text-primary hover:underline">
+            ← Back to cart
+          </Link>
+        </PageSection>
+      </PageShell>
     );
   }
 
   if (!clientSecret || !stripePromise) {
     return (
-      <div className="min-h-screen bg-[#f9fafb] px-4 py-12">
-        <p className="text-slate-500">Could not start payment session.</p>
-        <Link to="/cart" className="text-primary font-bold">
-          Back to cart
-        </Link>
-      </div>
+      <PageShell>
+        <PageSection narrow>
+          <p className="text-slate-500 mb-4">Could not start payment session.</p>
+          <Link to="/cart" className="font-bold text-primary">
+            Back to cart
+          </Link>
+        </PageSection>
+      </PageShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f9fafb] px-4 py-10">
-      <div className="max-w-xl mx-auto">
-        <Link to="/cart" className="text-primary font-bold text-sm mb-6 inline-block">
-          ← Cart
-        </Link>
-        <h1 className="text-3xl font-black text-slate-900 mb-2">Checkout</h1>
-        <p className="text-slate-500 mb-8">Secure payment with Stripe (test mode)</p>
-        <Elements
-          stripe={stripePromise}
-          options={{
-            clientSecret,
-            appearance: { theme: 'stripe' },
-          }}
-        >
-          <CheckoutForm />
-        </Elements>
-      </div>
-    </div>
+    <PageShell footer={false}>
+      <PageSection narrow className="py-8 sm:py-12">
+        <PageHeader
+          eyebrow="Secure pay"
+          title="Checkout"
+          subtitle="Test mode — use Stripe test cards. Your card details are encrypted by Stripe."
+          backTo="/cart"
+          backLabel="Cart"
+        />
+        <Card variant="elevated" className="max-w-2xl mx-auto">
+          <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+            <CheckoutForm />
+          </Elements>
+        </Card>
+      </PageSection>
+    </PageShell>
   );
 };
 

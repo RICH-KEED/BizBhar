@@ -9,6 +9,7 @@ import SellerDashboard from './pages/SellerDashboard';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
 import AddProduct from './pages/AddProduct';
+import SellerProducts from './pages/SellerProducts';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
@@ -58,13 +59,21 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route 
-          path="/seller/products/add" 
+        <Route
+          path="/seller/products/add"
           element={
             <ProtectedRoute>
               <AddProduct />
             </ProtectedRoute>
-          } 
+          }
+        />
+        <Route
+          path="/seller/products"
+          element={
+            <ProtectedRoute>
+              <SellerProducts />
+            </ProtectedRoute>
+          }
         />
         <Route 
           path="/profile" 

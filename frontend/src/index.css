@@ -1,15 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply m-0 min-h-screen font-sans antialiased text-slate-900 bg-background-light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    @apply bg-primary/15 text-slate-900;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Named component classes — use these in JSX as className="btn-primary", etc. */
+@layer components {
+  .form-field {
+    @apply relative;
+  }
+
+  .form-label {
+    @apply block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2;
+  }
+
+  .form-input {
+    @apply w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-primary/25 focus:border-primary outline-none transition-all;
+  }
+
+  .form-input--error {
+    @apply border-red-300 ring-red-100;
+  }
+
+  /* Pair with class "material-symbols-outlined" on the icon span */
+  .form-input-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl pointer-events-none;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/25 transition-all hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary--block {
+    @apply w-full py-3.5 text-sm;
+  }
+
+  .btn-primary--filter {
+    @apply px-8 py-3.5 shadow-md shadow-primary/25 shrink-0 hover:brightness-105 transition-all;
+  }
+
+  .btn-primary--compact {
+    @apply px-5 py-2.5 text-sm shadow-md shadow-primary/25 hover:opacity-95;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white font-bold text-slate-800 shadow-sm transition-all hover:bg-slate-50;
+  }
+
+  .btn-secondary--pad {
+    @apply px-6 py-3;
+  }
+
+  .alert-error {
+    @apply mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm font-medium;
+  }
 }

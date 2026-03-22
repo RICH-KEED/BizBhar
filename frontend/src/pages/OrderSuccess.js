@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { checkoutAPI } from '../services/api';
+import { PageShell, PageSection, Card, LoadingState, AlertBanner } from '../components/ui';
 
 const OrderSuccess = () => {
   const { paymentIntentId } = useParams();
@@ -23,20 +24,44 @@ const OrderSuccess = () => {
       attempts += 1;
       try {
         const res = await checkoutAPI.orderStatus(id);
-        if (res.data?.orderId) {
+        if (res.data?.ready && res.data?.orderId) {
           setOrder(res.data);
           setPolling(false);
           clearInterval(timer);
           return;
         }
-      } catch {
-        // 404 until webhook creates order
+      } catch (err) {
+        const status = err?.response?.status;
+        const body = err?.response?.data;
+        const msg = typeof body === 'string' ? body : '';
+        if (status === 403) {
+          clearInterval(timer);
+          setPolling(false);
+          setError('You cannot view this order with the current account.');
+          return;
+        }
+        if (status === 401) {
+          clearInterval(timer);
+          setPolling(false);
+          setError(
+            msg ||
+              'Sign in required or session expired. Sign in again — your payment may still be recorded; check My orders.'
+          );
+          return;
+        }
+        if (status === 400) {
+          clearInterval(timer);
+          setPolling(false);
+          setError(msg || 'Could not check order status.');
+          return;
+        }
+        /* transient network errors — keep polling */
       }
       if (attempts >= maxAttempts) {
         clearInterval(timer);
         setPolling(false);
         setError(
-          'Order is still being confirmed. If payment succeeded, ensure the Stripe webhook is forwarded to this server (e.g. Stripe CLI: stripe listen --forward-to localhost:8080/api/webhook/stripe).'
+          'Could not confirm your order in time. If Stripe is configured and you were charged, try refreshing this page or open My orders. For webhooks only: stripe listen --forward-to http://localhost:8081/api/webhook/stripe'
         );
       }
     }, 1000);
@@ -45,36 +70,46 @@ const OrderSuccess = () => {
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-[#f9fafb] flex flex-col items-center justify-center px-4 py-12">
-      {polling && !order && !error && (
-        <p className="text-slate-600">Confirming your order…</p>
-      )}
-      {order && (
-        <div className="text-center max-w-md space-y-4">
-          <h1 className="text-3xl font-black text-green-700">Payment successful</h1>
-          <p className="text-slate-600">
-            Order <span className="font-bold text-slate-900">#{order.orderId}</span> is placed (status: {order.status}
-            ).
-          </p>
-          <Link to="/my-orders" className="inline-block text-primary font-bold">
-            View my orders
-          </Link>
-          <div>
-            <Link to="/products" className="text-slate-500 text-sm">
-              Continue shopping
-            </Link>
+    <PageShell footer={false}>
+      <PageSection narrow className="py-16 sm:py-24">
+        {polling && !order && !error && (
+          <div className="max-w-md mx-auto text-center">
+            <LoadingState message="Confirming your order…" />
           </div>
-        </div>
-      )}
-      {error && !order && (
-        <div className="max-w-lg text-center space-y-4">
-          <p className="text-amber-800 text-sm">{error}</p>
-          <Link to="/products" className="text-primary font-bold">
-            Back to shop
-          </Link>
-        </div>
-      )}
-    </div>
+        )}
+
+        {order && (
+          <Card variant="elevated" className="max-w-lg mx-auto text-center !py-12">
+            <div className="inline-flex size-16 rounded-full bg-emerald-100 text-emerald-600 items-center justify-center mb-6">
+              <span className="material-symbols-outlined text-4xl">check_circle</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mb-3">Payment successful</h1>
+            <p className="text-slate-600 mb-8">
+              Order <span className="font-bold text-slate-900">#{order.orderId}</span> is placed (status: {order.status}).
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link to="/my-orders" className="btn-primary px-6 py-3 shadow-lg shadow-primary/20">
+                View my orders
+              </Link>
+              <Link to="/products" className="btn-secondary btn-secondary--pad">
+                Continue shopping
+              </Link>
+            </div>
+          </Card>
+        )}
+
+        {error && !order && (
+          <Card className="max-w-lg mx-auto !p-8 text-center">
+            <AlertBanner variant="warning" icon="schedule" className="mb-6 text-left">
+              {error}
+            </AlertBanner>
+            <Link to="/products" className="font-bold text-primary hover:underline">
+              Back to shop
+            </Link>
+          </Card>
+        )}
+      </PageSection>
+    </PageShell>
   );
 };
 

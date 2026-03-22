@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+/** Same-origin in dev (src/setupProxy.js → backend). Override with REACT_APP_API_URL if needed. */
+const API_BASE_URL = (process.env.REACT_APP_API_URL || '') + '/api';
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -40,7 +41,11 @@ export const shopAPI = {
 export const productAPI = {
   list: (params) => api.get('/products', { params }),
   getById: (id) => api.get(`/products/${id}`),
+  /** Seller only — JWT required */
+  listMyShop: () => api.get('/products/my-shop', { params: { _t: Date.now() } }),
   create: (data) => api.post('/products', data),
+  /** Seller only — partial body, e.g. { stock: 12 } */
+  update: (id, data) => api.put(`/products/${id}`, data),
 };
 
 export const cartAPI = {

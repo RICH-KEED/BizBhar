@@ -1,15 +1,47 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { shopAPI } from '../services/api';
+import { getUser } from '../utils/auth';
+import { PageShell, PageSection, PageHeader, Card, AlertBanner, LoadingState } from '../components/ui';
 
 const SellerOnboard = () => {
   const navigate = useNavigate();
+  const user = getUser();
   const [formData, setFormData] = useState({
     name: '',
     logoUrl: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  /** Only sellers need the “already have a shop?” check */
+  const [checkingShop, setCheckingShop] = useState(() => user?.role === 'SELLER');
+
+  useEffect(() => {
+    if (user?.role !== 'SELLER') return;
+    shopAPI
+      .getMyShop()
+      .then(() => {
+        navigate('/seller/dashboard', { replace: true });
+      })
+      .catch((err) => {
+        const status = err.response?.status;
+        if (status === 404) {
+          setCheckingShop(false);
+          return;
+        }
+        const d = err.response?.data;
+        const msg = typeof d === 'string' ? d : err.message || 'Could not verify your shop';
+        setError(msg);
+        setCheckingShop(false);
+      });
+  }, [navigate, user?.role]);
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  if (user.role !== 'SELLER') {
+    return <Navigate to="/" replace />;
+  }
 
   const handleChange = (e) => {
     setFormData({
@@ -28,84 +60,108 @@ const SellerOnboard = () => {
       await shopAPI.createShop(formData);
       navigate('/seller/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || err.response?.data || 'Failed to create shop');
+      const d = err.response?.data;
+      setError(typeof d === 'string' ? d : d?.message || 'Failed to create shop');
     } finally {
       setLoading(false);
     }
   };
 
+  if (checkingShop) {
+    return (
+      <PageShell footer={false}>
+        <PageSection narrow className="py-24">
+          <LoadingState message="Checking your shop…" />
+        </PageSection>
+      </PageShell>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-background-light flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl bg-white shadow-2xl rounded-lg p-8">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center text-white shadow-lg mx-auto mb-4">
-            <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-            </svg>
-          </div>
-          <h2 className="text-3xl font-bold text-slate-900 mb-2">Welcome to BizBhar!</h2>
-          <p className="text-slate-500">Let's set up your shop and start selling</p>
-        </div>
+    <PageShell footer={false}>
+      <PageSection narrow className="py-10 sm:py-14">
+        <PageHeader
+          eyebrow="Seller setup"
+          title="Create your shop"
+          subtitle="One quick step — then you can publish products and receive orders."
+        />
 
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-bold text-slate-700 mb-2">
-              Shop Name *
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-              placeholder="Enter your shop name"
-              required
-            />
+        <Card variant="elevated" className="max-w-xl mx-auto">
+          <div className="flex justify-center mb-8">
+            <div className="size-16 rounded-2xl bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/30">
+              <span className="material-symbols-outlined text-4xl">storefront</span>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-bold text-slate-700 mb-2">
-              Logo URL (optional)
-            </label>
-            <input
-              type="url"
-              name="logoUrl"
-              value={formData.logoUrl}
-              onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-              placeholder="https://example.com/logo.png"
-            />
-            <p className="text-xs text-slate-500 mt-1">You can add a logo later from settings</p>
-          </div>
+          {error && (
+            <AlertBanner variant="error" className="mb-6" icon="error">
+              {typeof error === 'string' ? error : 'Failed to create shop'}
+            </AlertBanner>
+          )}
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="font-semibold text-blue-900 mb-2">What happens next?</h4>
-            <ul className="text-sm text-blue-700 space-y-1">
-              <li>✓ Your shop will be created instantly</li>
-              <li>✓ You'll get access to the seller dashboard</li>
-              <li>✓ Start adding products and managing orders</li>
-            </ul>
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-2" htmlFor="shop-name">
+                Shop name *
+              </label>
+              <input
+                id="shop-name"
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary/25 focus:border-primary outline-none transition-all"
+                placeholder="e.g. Spice Route Co."
+                required
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary hover:bg-blue-800 text-white font-bold py-4 rounded-lg shadow-md shadow-primary/10 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Creating Shop...' : 'Create My Shop'}
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
-        </form>
-      </div>
-    </div>
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-2" htmlFor="shop-logo">
+                Logo URL (optional)
+              </label>
+              <input
+                id="shop-logo"
+                type="url"
+                name="logoUrl"
+                value={formData.logoUrl}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-primary/25 focus:border-primary outline-none transition-all"
+                placeholder="https://…"
+              />
+              <p className="text-xs text-slate-500 mt-1.5">You can update this later from your shop settings.</p>
+            </div>
+
+            <div className="rounded-xl bg-blue-50 border border-blue-100 p-4">
+              <h4 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                <span className="material-symbols-outlined text-blue-600 text-[20px]">tips_and_updates</span>
+                What happens next
+              </h4>
+              <ul className="text-sm text-blue-800 space-y-1.5">
+                <li className="flex gap-2">
+                  <span className="text-blue-500">✓</span> Your shop is created instantly
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-blue-500">✓</span> Access the seller dashboard
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-blue-500">✓</span> Add products and manage orders
+                </li>
+              </ul>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-primary hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/25 flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              {loading ? 'Creating…' : 'Create my shop'}
+              <span className="material-symbols-outlined">arrow_forward</span>
+            </button>
+          </form>
+        </Card>
+      </PageSection>
+    </PageShell>
   );
 };
 
