@@ -51,4 +51,10 @@ export const cartAPI = {
   sync: (body) => api.post('/cart/sync', body),
 };
 
+export const checkoutAPI = {
+  createPaymentIntent: () => api.post('/checkout/payment-intent'),
+  orderStatus: (paymentIntentId) =>
+    api.get(`/checkout/order-status/${encodeURIComponent(paymentIntentId)}`),
+};
+
 export default api;
