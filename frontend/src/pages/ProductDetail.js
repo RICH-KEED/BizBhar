@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { productAPI } from '../services/api';
+import { cartAPI, productAPI } from '../services/api';
+import { isAuthenticated } from '../utils/auth';
+import { addGuestItem } from '../utils/guestCart';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [adding, setAdding] = useState(false);
+  const [msg, setMsg] = useState('');
   useEffect(() => {
     productAPI
       .getById(id)
@@ -17,6 +21,24 @@ const ProductDetail = () => {
 
   const formatPrice = (p) =>
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Number(p));
+
+  const handleAddToCart = async () => {
+    if (!product || product.stock === 0) return;
+    setMsg('');
+    setAdding(true);
+    try {
+      if (isAuthenticated()) {
+        await cartAPI.add({ productId: product.id, quantity: 1 });
+      } else {
+        addGuestItem(product.id, 1);
+      }
+      setMsg('Added to cart.');
+    } catch (e) {
+      setMsg(e.response?.data || e.message || 'Could not add to cart');
+    } finally {
+      setAdding(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -66,6 +88,24 @@ const ProductDetail = () => {
           <p className="text-3xl font-black text-primary">{formatPrice(product.price)}</p>
           <p className="text-slate-600 whitespace-pre-wrap">{product.description || 'No description.'}</p>
           <p className="text-sm text-slate-500">Stock: {product.stock}</p>
+          {product.stock > 0 && (
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              disabled={adding}
+              className="mt-4 w-full sm:w-auto px-8 py-4 rounded-xl bg-primary text-white font-bold hover:opacity-95 disabled:opacity-50"
+            >
+              {adding ? 'Adding...' : 'Add to cart'}
+            </button>
+          )}
+          {msg && (
+            <p className="text-sm text-green-700 mt-2">
+              {msg}{' '}
+              <Link to="/cart" className="font-bold underline text-primary">
+                View cart
+              </Link>
+            </p>
+          )}
         </div>
       </main>
     </div>

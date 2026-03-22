@@ -43,4 +43,12 @@ export const productAPI = {
   create: (data) => api.post('/products', data),
 };
 
+export const cartAPI = {
+  get: () => api.get('/cart'),
+  add: (data) => api.post('/cart/add', data),
+  update: (cartItemId, data) => api.put(`/cart/${cartItemId}`, data),
+  remove: (cartItemId) => api.delete(`/cart/${cartItemId}`),
+  sync: (body) => api.post('/cart/sync', body),
+};
+
 export default api;

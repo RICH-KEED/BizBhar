@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../services/api';
 import { setToken, setUser } from '../utils/auth';
+import { mergeGuestCartToServer } from '../utils/guestCart';
+import { cartAPI } from '../services/api';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -49,7 +51,8 @@ const Register = () => {
       
       setToken(token);
       setUser({ email, role });
-      
+      await mergeGuestCartToServer(cartAPI);
+
       navigate('/profile');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');

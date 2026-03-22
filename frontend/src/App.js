@@ -9,6 +9,7 @@ import SellerDashboard from './pages/SellerDashboard';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
 import AddProduct from './pages/AddProduct';
+import Cart from './pages/Cart';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/products/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
         <Route 
           path="/seller/products/add" 
           element={
