@@ -24,6 +24,9 @@ const Home = () => {
               <h2 className="text-xl font-extrabold tracking-tight text-slate-900">BizBhar</h2>
             </div>
             <nav className="hidden lg:flex items-center gap-6">
+              <Link to="/products" className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors">
+                Shop
+              </Link>
               <a className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors" href="#">Electronics</a>
               <a className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors" href="#">Fashion</a>
               <a className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors" href="#">Home & Living</a>

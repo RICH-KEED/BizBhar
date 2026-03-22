@@ -3,6 +3,7 @@ package com.bizbhar.service;
 import com.bizbhar.dto.ShopRequest;
 import com.bizbhar.dto.ShopStatsResponse;
 import com.bizbhar.model.Shop;
+import com.bizbhar.repository.ProductRepository;
 import com.bizbhar.repository.ShopRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,11 @@ import java.math.BigDecimal;
 public class ShopService {
 
     private final ShopRepository shopRepository;
+    private final ProductRepository productRepository;
 
-    public ShopService(ShopRepository shopRepository) {
+    public ShopService(ShopRepository shopRepository, ProductRepository productRepository) {
         this.shopRepository = shopRepository;
+        this.productRepository = productRepository;
     }
 
     public Shop createShop(Long sellerId, ShopRequest request) {
@@ -42,15 +45,15 @@ public class ShopService {
         Shop shop = shopRepository.findById(shopId)
                 .orElseThrow(() -> new RuntimeException("Shop not found"));
 
-        // For now, return dummy stats. In real app, calculate from orders/products
+        int productCount = (int) productRepository.countByShopId(shopId);
         return new ShopStatsResponse(
                 shop.getId(),
                 shop.getName(),
                 shop.getBalance(),
-                new BigDecimal("45200"), // Total revenue
-                124, // Total orders
-                45,  // Active products
-                4.8  // Rating
+                new BigDecimal("45200"),
+                124,
+                productCount,
+                4.8
         );
     }
 }
