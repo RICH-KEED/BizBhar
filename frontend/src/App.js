@@ -12,6 +12,8 @@ import AddProduct from './pages/AddProduct';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
+import MyOrders from './pages/MyOrders';
+import SellerOrders from './pages/SellerOrders';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -37,6 +39,22 @@ function App() {
           element={
             <ProtectedRoute>
               <OrderSuccess />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-orders"
+          element={
+            <ProtectedRoute>
+              <MyOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/orders"
+          element={
+            <ProtectedRoute>
+              <SellerOrders />
             </ProtectedRoute>
           }
         />

@@ -57,4 +57,10 @@ export const checkoutAPI = {
     api.get(`/checkout/order-status/${encodeURIComponent(paymentIntentId)}`),
 };
 
+export const orderAPI = {
+  myOrders: () => api.get('/orders/my'),
+  shopOrders: (shopId) => api.get(`/orders/shop/${shopId}`),
+  updateStatus: (orderId, data) => api.put(`/orders/${orderId}/status`, data),
+};
+
 export default api;
