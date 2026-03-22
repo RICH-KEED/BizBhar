@@ -88,6 +88,13 @@
             <artifactId>stripe-java</artifactId>
             <version>26.5.1</version>
         </dependency>
+
+        <!-- Load backend/.env into JVM properties (Stripe keys) -->
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

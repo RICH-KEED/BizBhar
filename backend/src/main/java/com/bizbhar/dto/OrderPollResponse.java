@@ -1,18 +1,32 @@
 package com.bizbhar.dto;
 
-public class OrderStatusResponse {
+/**
+ * Polling response for checkout: {@code ready=false} until the order row exists (webhook or
+ * server-side sync from Stripe after payment).
+ */
+public class OrderPollResponse {
 
+    private boolean ready;
     private Long orderId;
     private String status;
     private String stripePaymentId;
 
-    public OrderStatusResponse() {
+    public OrderPollResponse() {
     }
 
-    public OrderStatusResponse(Long orderId, String status, String stripePaymentId) {
+    public OrderPollResponse(boolean ready, Long orderId, String status, String stripePaymentId) {
+        this.ready = ready;
         this.orderId = orderId;
         this.status = status;
         this.stripePaymentId = stripePaymentId;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
     }
 
     public Long getOrderId() {

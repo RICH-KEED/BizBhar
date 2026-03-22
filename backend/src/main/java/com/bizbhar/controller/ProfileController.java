@@ -21,9 +21,10 @@ public class ProfileController {
     // GET /api/profile → requires valid JWT
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(Authentication authentication) {
-        String email = authentication.getName();
+        String raw = authentication.getName();
+        String email = raw != null ? raw.trim().toLowerCase() : "";
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return ResponseEntity.ok(Map.of(

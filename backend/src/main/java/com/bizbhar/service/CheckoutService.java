@@ -2,7 +2,7 @@ package com.bizbhar.service;
 
 import com.bizbhar.dto.CartLineResponse;
 import com.bizbhar.dto.CheckoutPaymentIntentResponse;
-import com.bizbhar.dto.OrderStatusResponse;
+import com.bizbhar.dto.OrderPollResponse;
 import com.bizbhar.model.Cart;
 import com.bizbhar.model.Order;
 import com.bizbhar.model.Product;
@@ -14,23 +14,33 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class CheckoutService {
 
+    private static final Logger log = LoggerFactory.getLogger(CheckoutService.class);
+
     private final CartService cartService;
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+
+    /** Proxied self-invocation so {@link #finalizeOrder} runs inside {@code @Transactional}. */
+    private final CheckoutService self;
 
     @Value("${stripe.publishable.key:}")
     private String publishableKey;
@@ -39,11 +49,13 @@ public class CheckoutService {
             CartService cartService,
             CartRepository cartRepository,
             ProductRepository productRepository,
-            OrderRepository orderRepository) {
+            OrderRepository orderRepository,
+            @Lazy CheckoutService self) {
         this.cartService = cartService;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
+        this.self = self;
     }
 
     public CheckoutPaymentIntentResponse createPaymentIntent(Long userId) throws StripeException {
@@ -108,7 +120,9 @@ public class CheckoutService {
 
         List<Cart> lines = cartRepository.findByUserIdOrderByUpdatedAtDesc(userId);
         if (lines.isEmpty()) {
-            return;
+            throw new IllegalStateException(
+                    "Cannot finalize order: cart is empty for payment intent " + pi.getId()
+                            + ". The order may have been created already, or the session cart was cleared before the webhook ran.");
         }
 
         BigDecimal computed = BigDecimal.ZERO;
@@ -142,9 +156,52 @@ public class CheckoutService {
         cartService.clearCart(userId);
     }
 
-    public Optional<OrderStatusResponse> findOrderForUser(Long userId, String paymentIntentId) {
+    /**
+     * Poll for order row. If missing but Stripe already charged the card (common when webhooks are not
+     * forwarded locally), {@link #tryFinalizeFromStripeIfSucceeded} creates the same row the webhook would.
+     */
+    public OrderPollResponse pollOrderForUser(Long userId, String paymentIntentId) {
         return orderRepository.findByStripePaymentId(paymentIntentId)
-                .filter(o -> o.getUserId().equals(userId))
-                .map(o -> new OrderStatusResponse(o.getId(), o.getStatus(), o.getStripePaymentId()));
+                .map(o -> toPollResponse(userId, o))
+                .orElseGet(() -> {
+                    tryFinalizeFromStripeIfSucceeded(userId, paymentIntentId);
+                    return orderRepository.findByStripePaymentId(paymentIntentId)
+                            .map(o -> toPollResponse(userId, o))
+                            .orElse(new OrderPollResponse(false, null, null, null));
+                });
+    }
+
+    private OrderPollResponse toPollResponse(Long userId, Order o) {
+        if (!o.getUserId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Order does not belong to this user");
+        }
+        return new OrderPollResponse(true, o.getId(), o.getStatus(), o.getStripePaymentId());
+    }
+
+    /**
+     * When {@code payment_intent.succeeded} never hits this server (no {@code stripe listen}), the order
+     * row is still missing. Retrieve the PI from Stripe; if paid and metadata matches, run the same
+     * {@link #finalizeOrder} path as the webhook (idempotent if already inserted).
+     */
+    private void tryFinalizeFromStripeIfSucceeded(Long userId, String paymentIntentId) {
+        if (Stripe.apiKey == null || Stripe.apiKey.isBlank()) {
+            return;
+        }
+        try {
+            PaymentIntent pi = PaymentIntent.retrieve(paymentIntentId);
+            if (!"succeeded".equals(pi.getStatus())) {
+                return;
+            }
+            String uid = pi.getMetadata() != null ? pi.getMetadata().get("userId") : null;
+            if (uid == null || !uid.equals(String.valueOf(userId))) {
+                return;
+            }
+            self.finalizeOrder(pi);
+        } catch (StripeException e) {
+            log.debug("Stripe retrieve during order poll: {}", e.getMessage());
+        } catch (IllegalStateException e) {
+            // Cart empty / mismatch — webhook may have raced; next poll sees DB row or user retries
+            log.debug("Finalize during poll skipped: {}", e.getMessage());
+        }
     }
 }

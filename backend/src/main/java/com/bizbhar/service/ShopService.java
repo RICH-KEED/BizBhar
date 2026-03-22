@@ -3,6 +3,7 @@ package com.bizbhar.service;
 import com.bizbhar.dto.ShopRequest;
 import com.bizbhar.dto.ShopStatsResponse;
 import com.bizbhar.model.Shop;
+import com.bizbhar.repository.OrderRepository;
 import com.bizbhar.repository.ProductRepository;
 import com.bizbhar.repository.ShopRepository;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,15 @@ public class ShopService {
 
     private final ShopRepository shopRepository;
     private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
 
-    public ShopService(ShopRepository shopRepository, ProductRepository productRepository) {
+    public ShopService(
+            ShopRepository shopRepository,
+            ProductRepository productRepository,
+            OrderRepository orderRepository) {
         this.shopRepository = shopRepository;
         this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
     }
 
     public Shop createShop(Long sellerId, ShopRequest request) {
@@ -46,14 +52,18 @@ public class ShopService {
                 .orElseThrow(() -> new RuntimeException("Shop not found"));
 
         int productCount = (int) productRepository.countByShopId(shopId);
+        BigDecimal totalRevenue = orderRepository.sumTotalByShopId(shopId);
+        if (totalRevenue == null) {
+            totalRevenue = BigDecimal.ZERO;
+        }
+        int orderCount = (int) orderRepository.countByShopId(shopId);
         return new ShopStatsResponse(
                 shop.getId(),
                 shop.getName(),
                 shop.getBalance(),
-                new BigDecimal("45200"),
-                124,
+                totalRevenue,
+                orderCount,
                 productCount,
-                4.8
-        );
+                null);
     }
 }

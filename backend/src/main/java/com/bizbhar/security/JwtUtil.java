@@ -23,10 +23,11 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // Generate JWT token with email and role
+    // Generate JWT token with email and role (subject is normalized for consistent DB lookup)
     public String generateToken(String email, String role) {
+        String subject = email != null ? email.trim().toLowerCase() : "";
         return Jwts.builder()
-                .subject(email)
+                .subject(subject)
                 .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))

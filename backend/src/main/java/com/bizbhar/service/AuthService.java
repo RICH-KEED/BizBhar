@@ -25,14 +25,14 @@ public class AuthService {
 
     // Register a new user
     public AuthResponse register(AuthRequest request) {
-        // Check if email already exists
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already registered: " + request.getEmail());
+        String email = normalizeEmail(request.getEmail());
+        if (userRepository.existsByEmailIgnoreCase(email)) {
+            throw new RuntimeException("Email already registered: " + email);
         }
 
         // Create new user
         User user = new User();
-        user.setEmail(request.getEmail());
+        user.setEmail(email);
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         user.setRole(request.getRole() != null ? request.getRole().toUpperCase() : "BUYER");
 
@@ -47,9 +47,9 @@ public class AuthService {
 
     // Login existing user
     public AuthResponse login(AuthRequest request) {
-        // Find user by email
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found: " + request.getEmail()));
+        String email = normalizeEmail(request.getEmail());
+        User user = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new RuntimeException("User not found: " + email));
 
         // Verify password
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
@@ -60,5 +60,12 @@ public class AuthService {
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
         return new AuthResponse(token, user.getEmail(), user.getRole());
+    }
+
+    private static String normalizeEmail(String raw) {
+        if (raw == null) {
+            return "";
+        }
+        return raw.trim().toLowerCase();
     }
 }

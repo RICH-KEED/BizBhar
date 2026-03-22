@@ -13,6 +13,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     long countByShopId(Long shopId);
 
+    List<Product> findByShopIdOrderByCreatedAtDesc(Long shopId);
+
     @Query("""
             SELECT p FROM Product p WHERE
             (:category IS NULL OR :category = '' OR LOWER(p.category) = LOWER(:category))

@@ -5,7 +5,7 @@ import com.bizbhar.dto.CartLineResponse;
 import com.bizbhar.dto.CartSyncRequest;
 import com.bizbhar.dto.CartUpdateRequest;
 import com.bizbhar.model.Cart;
-import com.bizbhar.security.JwtUtil;
+import com.bizbhar.service.AuthIdentityService;
 import com.bizbhar.service.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,21 +14,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cart")
-@CrossOrigin(origins = "http://localhost:3000")
 public class CartController {
 
     private final CartService cartService;
-    private final JwtUtil jwtUtil;
+    private final AuthIdentityService authIdentityService;
 
-    public CartController(CartService cartService, JwtUtil jwtUtil) {
+    public CartController(CartService cartService, AuthIdentityService authIdentityService) {
         this.cartService = cartService;
-        this.jwtUtil = jwtUtil;
+        this.authIdentityService = authIdentityService;
     }
 
-    private Long userIdFromAuth(String token) {
-        String jwt = token.substring(7);
-        String email = jwtUtil.extractEmail(jwt);
-        return (long) email.hashCode();
+    private long userIdFromAuth(String token) {
+        return authIdentityService.userIdFromBearer(token);
     }
 
     @PostMapping("/add")
